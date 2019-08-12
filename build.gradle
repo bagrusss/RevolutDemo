@@ -18,6 +18,9 @@ buildscript {
             core_ktx                : "1.0.2",
             lifecycle_version       : "2.1.0-rc01",
 
+            rx_java                 : "2.2.11",
+            rx_android              : "2.1.1",
+
             retrofit                : "2.6.0",
             okhttp                  : "3.14.2",
             moshi                   : "1.8.0",
@@ -32,7 +35,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_plugin"
@@ -44,7 +47,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 
