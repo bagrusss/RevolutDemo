@@ -8,11 +8,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".currencies.MainActivity">
+        <activity android:name=".rates.RatesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
