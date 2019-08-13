@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    implementation "androidx.recyclerview:recyclerview:$recycler_view"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -90,6 +91,8 @@ dependencies {
     ////////////////
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
     implementation "com.squareup.moshi:moshi:$moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi"
