@@ -9,8 +9,7 @@ import ru.bagrusss.revolutdemo.rates.RatesActivity
  */
 @Subcomponent(
     modules = [
-        RatesVMModule::class,
-        RatesInteractorModule::class
+        RatesModule::class
     ]
 )
 @RatesScope
