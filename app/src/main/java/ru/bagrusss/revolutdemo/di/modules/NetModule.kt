@@ -2,6 +2,7 @@ package ru.bagrusss.revolutdemo.di.modules
 
 import dagger.Module
 import dagger.Provides
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -29,7 +30,8 @@ class NetModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .baseUrl(BASE_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(MoshiConverterFactory.create())
             .client(okHttpClient)
             .build()
@@ -38,5 +40,9 @@ class NetModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): RatesService = retrofit.create(RatesService::class.java)
+
+    companion object {
+        const val BASE_URL = "https://revolut.duckdns.org/"
+    }
 
 }

@@ -8,9 +8,9 @@ import ru.bagrusss.revolutdemo.net.models.RatesResponse
 /**
  * Created by bagrusss on 12.08.2019
  */
-interface RatesService : ApiService {
+interface RatesService {
 
-    @GET("https://revolut.duckdns.org/latest")
+    @GET("latest")
     fun getRates(@Query("base") base: String = "EUR"): Single<RatesResponse>
 
 }
