@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import dagger.android.DaggerActivity
+import dagger.android.support.DaggerAppCompatActivity
 
 /**
  * Created by bagrusss on 12.08.2019
  */
-abstract class MvvmActivity<DB : ViewDataBinding, out VM : BaseViewModel<*>> : AppCompatActivity() {
+abstract class MvvmActivity<DB : ViewDataBinding, out VM : BaseViewModel<*>> : DaggerAppCompatActivity() {
 
     protected lateinit var binding: DB
     protected val vm by createViewModel()
