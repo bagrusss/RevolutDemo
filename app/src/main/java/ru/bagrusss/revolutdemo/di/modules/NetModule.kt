@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.di.modules
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -23,6 +24,7 @@ class NetModule {
         return OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+            .addNetworkInterceptor(StethoInterceptor())
             .build()
     }
 

@@ -102,6 +102,14 @@ dependencies {
 
     /////////////////
     //
+    // DEV
+    //
+    ////////////////
+    implementation "com.facebook.stetho:stetho-okhttp3:$stetho"
+
+
+    /////////////////
+    //
     // TESTS
     //
     ////////////////
