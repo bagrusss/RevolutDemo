@@ -16,7 +16,7 @@ class RatesInteractorImpl @Inject constructor(
 ) : RatesInteractor {
 
     override val ratesChanges: Observable<List<Rate>> by lazy {
-        Observable.interval(5, TimeUnit.SECONDS)
+        Observable.interval(1, TimeUnit.SECONDS)
             .flatMapSingle { ratesGateway.rates }
             .observeOn(schedulers.ui)
     }

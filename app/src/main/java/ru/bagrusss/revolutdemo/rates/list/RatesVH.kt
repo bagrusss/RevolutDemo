@@ -10,7 +10,11 @@ import ru.bagrusss.revolutdemo.util.recycler.BindingViewHolder
 class RatesVH(binding: ItemRateBinding): BindingViewHolder<ItemRateBinding, Rate>(binding) {
 
     override fun onBind(data: Rate) {
-
+        binding.run {
+            rateTitle.text = data.title
+            rateDescription.text = data.description
+            rateValue.setText(data.cost.toString())
+        }
     }
 
 }

@@ -21,6 +21,9 @@
             android:id="@+id/rate_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/rate_description"
             app:layout_constraintStart_toEndOf="@+id/rate_country"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,10 +33,22 @@
             android:id="@+id/rate_description"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/rate_country"
             app:layout_constraintTop_toBottomOf="@+id/rate_title"
             tools:text="Euro" />
+
+
+        <EditText
+            android:id="@+id/rate_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rate_country"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rate_country" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

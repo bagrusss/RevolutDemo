@@ -11,20 +11,16 @@ import javax.inject.Inject
 /**
  * Created by bagrusss on 12.08.2019
  */
-abstract class MvvmActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCompatActivity(), HasAndroidInjector {
+abstract class MvvmActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : DaggerAppCompatActivity() {
 
     protected lateinit var binding: DB
 
     @Inject
     lateinit var vm: VM
 
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
     protected abstract val layout: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, layout)
@@ -34,10 +30,6 @@ abstract class MvvmActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : AppCo
     override fun onDestroy() {
         lifecycle.removeObserver(vm)
         super.onDestroy()
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> {
-        return androidInjector
     }
 
 
