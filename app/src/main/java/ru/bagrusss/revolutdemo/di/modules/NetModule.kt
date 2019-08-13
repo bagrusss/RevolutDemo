@@ -5,8 +5,10 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import ru.bagrusss.revolutdemo.net.api.ApiService
+import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.bagrusss.revolutdemo.net.api.RatesService
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 /**
  * Created by bagrusss on 12.08.2019
@@ -15,6 +17,7 @@ import java.util.concurrent.TimeUnit
 class NetModule {
 
     @Provides
+    @Singleton
     fun provideOkHttp(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
@@ -23,13 +26,17 @@ class NetModule {
     }
 
     @Provides
+    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(okHttpClient)
             .build()
     }
 
     @Provides
-    fun provideApiService(retrofit: Retrofit) = retrofit.create(ApiService::class.java)
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): RatesService = retrofit.create(RatesService::class.java)
 
 }
