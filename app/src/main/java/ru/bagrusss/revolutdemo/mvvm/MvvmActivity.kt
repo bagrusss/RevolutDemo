@@ -6,17 +6,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import dagger.android.DaggerActivity
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 /**
  * Created by bagrusss on 12.08.2019
  */
-abstract class MvvmActivity<DB : ViewDataBinding, out VM : BaseViewModel<*>> : DaggerAppCompatActivity() {
+abstract class MvvmActivity<DB : ViewDataBinding, VM : BaseViewModel<*>> : DaggerAppCompatActivity() {
 
     protected lateinit var binding: DB
-    protected val vm by createViewModel()
+
+    @Inject
+    lateinit var vm: VM
 
     protected abstract val layout: Int
-    protected abstract fun createViewModel(): Lazy<VM>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

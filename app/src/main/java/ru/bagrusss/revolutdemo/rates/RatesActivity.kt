@@ -9,12 +9,8 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
 
     override val layout = R.layout.activity_rates
 
-    override fun createViewModel(): Lazy<RatesVM> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
+
 }
