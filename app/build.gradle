@@ -106,6 +106,7 @@ dependencies {
     //
     ////////////////
     implementation "com.facebook.stetho:stetho-okhttp3:$stetho"
+    implementation "com.jakewharton.timber:timber:$timber"
 
 
     /////////////////

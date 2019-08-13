@@ -3,7 +3,9 @@ package ru.bagrusss.revolutdemo.app
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import ru.bagrusss.revolutdemo.BuildConfig
 import ru.bagrusss.revolutdemo.di.DaggerAppComponent
+import timber.log.Timber
 
 
 /**
@@ -21,6 +23,11 @@ class RatesApp: DaggerApplication() {
         super.onCreate()
 
         Stetho.initializeWithDefaults(this)
+
+        //TODO
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> = injector
