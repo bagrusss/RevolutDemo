@@ -5,6 +5,7 @@ import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
 import ru.bagrusss.revolutdemo.rates.di.RatesScope
 import ru.bagrusss.revolutdemo.rates.models.Rate
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -25,6 +26,7 @@ class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<Ra
             ratesChanges.postValue(it)
         }, {
             errorEvent.postValue(Unit)
+            Timber.e(it)
         })
     }
 

@@ -18,8 +18,8 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
         super.onCreate(savedInstanceState)
 
         binding.ratesList.run {
-            adapter = ratesAdapter
             layoutManager = LinearLayoutManager(context)
+            adapter = ratesAdapter
         }
         vm.ratesChanges.observe(this, Observer(ratesAdapter::swap))
     }
