@@ -18,6 +18,7 @@ buildscript {
             recycler_view           : "1.1.0-beta03",
             core_ktx                : "1.0.2",
             lifecycle_version       : "2.1.0-rc01",
+            material_version       : "1.0.0",
 
             rx_java                 : "2.2.11",
             rx_android              : "2.1.1",

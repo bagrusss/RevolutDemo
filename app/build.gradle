@@ -55,7 +55,7 @@ dependencies {
 
     /////////////////
     //
-    // ANDROIDX
+    // ANDROIDX && MATERIAL
     //
     ////////////////
     implementation "androidx.appcompat:appcompat:$appcompat"
@@ -65,6 +65,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "com.google.android.material:material:$material_version"
 
 
     ////////////////

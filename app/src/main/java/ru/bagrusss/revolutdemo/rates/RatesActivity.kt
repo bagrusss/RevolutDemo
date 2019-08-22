@@ -5,12 +5,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.snackbar.Snackbar
 import ru.bagrusss.revolutdemo.R
 import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
 import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
 import javax.inject.Inject
-import androidx.recyclerview.widget.SimpleItemAnimator
 
 class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
 
@@ -34,10 +35,15 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
             }
         }
         vm.ratesChanges.observe(this, Observer(ratesAdapter::swap))
-            vm.ratesChanged.observe(this, Observer {
-                binding.ratesList.scrollToPosition(0)
-                ratesAdapter.moveItem(it)
-            })
-        }
+        vm.ratesChanged.observe(this, Observer {
+            binding.ratesList.scrollToPosition(0)
+            ratesAdapter.moveItem(it)
+        })
+        vm.errorEvent.observe(this, Observer {
+            Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.repeat) { vm.ratesChanges() }
+                    .show()
+        })
+    }
 
 }
