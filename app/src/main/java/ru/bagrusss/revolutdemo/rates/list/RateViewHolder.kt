@@ -12,16 +12,16 @@ import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
 class RateViewHolder(binding: ItemRateBinding,
                      vm: RatesVM): MvvmViewHolder<ItemRateBinding, RatesVM, Rate>(binding, vm) {
 
-    private lateinit var currentData: Rate
+    private val data = RateItemData()
 
     init {
         itemView.setOnClickListener {
-            vm.ratesClicked(adapterPosition, currentData)
+            vm.ratesClicked(adapterPosition, data.title.get()!!, data.cost.get()!!.toFloat())
         }
+        binding.data = data
     }
 
     override fun onBind(data: Rate) {
-        currentData = data
         binding.run {
             rateTitle.text = data.title
             rateDescription.text = data.description

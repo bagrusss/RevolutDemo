@@ -12,7 +12,6 @@ interface RatesInteractor: Interactor {
 
     val ratesChanges: Observable<List<Rate>>
 
-    fun changeBaseRate(newRate: String, currentCost: Double)
-    fun rateChanged(rate: Rate): Completable
+    fun rateChanged(rate: String, cost: Float): Completable
 
 }

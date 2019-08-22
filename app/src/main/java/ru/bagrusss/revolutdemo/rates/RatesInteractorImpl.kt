@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.repository.ConfigRepository
 import ru.bagrusss.revolutdemo.net.gateways.RatesRepository
+import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import java.util.concurrent.TimeUnit
@@ -14,6 +15,7 @@ import javax.inject.Inject
  */
 class RatesInteractorImpl @Inject constructor(
     private val ratesRepo: RatesRepository,
+    private val resProvider: ResourcesProvider,
     private val configRepository: ConfigRepository,
     private val schedulers: SchedulersProvider
 ) : RatesInteractor {
@@ -22,19 +24,24 @@ class RatesInteractorImpl @Inject constructor(
         Observable.interval(1, TimeUnit.SECONDS)
                   .startWith(0)
                   .flatMapSingle {
-                      val currentRate = configRepository.currentRate
-                      ratesRepo.actualRates(currentRate.title, currentRate.cost)
-                               .map { listOf(currentRate) + it }
+                      val (rate, cost) = configRepository.currentBaseRate
+                      ratesRepo.actualRates(rate, cost)
+                               .map {
+                                   val (description, img) = resProvider.rateImageAndDescription(rate)
+                                   val baseRate = Rate(
+                                       title = rate,
+                                       description = description,
+                                       imgUrl = img,
+                                       cost = cost
+                                   )
+                                   listOf(baseRate) + it
+                               }
                   }
                   .observeOn(schedulers.ui)
     }
 
-    override fun changeBaseRate(newRate: String, currentCost: Double) {
-
-    }
-
-    override fun rateChanged(rate: Rate) = Completable.fromAction {
-        configRepository.currentRate = rate
+    override fun rateChanged(rate: String, cost: Float) = Completable.fromAction {
+        configRepository.currentBaseRate = rate to cost
     }
     .subscribeOn(schedulers.io)
     .observeOn(schedulers.ui)
