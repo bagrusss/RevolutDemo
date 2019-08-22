@@ -21,9 +21,14 @@ class RatesInteractorImpl @Inject constructor(
         Observable.interval(1, TimeUnit.SECONDS)
                   .flatMapSingle {
                       val currentRate = configRepository.currentRate
-                      ratesRepo.actualRates(currentRate)
+                      ratesRepo.actualRates(currentRate.title, currentRate.cost)
+                               .map { listOf(currentRate) + it }
                   }
                   .observeOn(schedulers.ui)
+    }
+
+    override fun changeBaseRate(newRate: String, currentCost: Double) {
+
     }
 
 }

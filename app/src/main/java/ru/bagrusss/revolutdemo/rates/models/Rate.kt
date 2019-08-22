@@ -8,5 +8,5 @@ class Rate(
     @JvmField val title: String,
     @JvmField val description: String,
     @JvmField val imgUrl: String,
-    @JvmField val cost: Double
+    @JvmField val cost: Float
 )
