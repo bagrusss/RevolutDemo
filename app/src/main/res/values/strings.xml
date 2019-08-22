@@ -36,5 +36,6 @@
     <string name="south_africa">South African Rand</string>
     <string name="euro">Euro</string>
     <string name="unknown_rate">Unknown rate</string>
+    <string name="default_rate_hint">0</string>
 
 </resources>
