@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.mvvm
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -16,7 +17,10 @@ abstract class BaseViewModel<I : Interactor>(@JvmField protected val interactor:
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun created() {}
 
+    @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    open fun destroyed() {}
+    open fun destroyed() {
+        disposables.clear()
+    }
 
 }
