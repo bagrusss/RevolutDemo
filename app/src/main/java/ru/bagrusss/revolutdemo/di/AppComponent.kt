@@ -1,7 +1,5 @@
 package ru.bagrusss.revolutdemo.di
 
-import android.app.Application
-import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -30,13 +28,7 @@ import javax.inject.Singleton
 @Singleton
 interface AppComponent: AndroidInjector<RatesApp> {
 
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): AppComponent
-    }
+    @Component.Factory
+    interface Factory: AndroidInjector.Factory<RatesApp>
 
 }

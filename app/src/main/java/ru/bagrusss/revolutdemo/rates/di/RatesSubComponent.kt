@@ -15,7 +15,7 @@ import ru.bagrusss.revolutdemo.rates.RatesActivity
 @RatesScope
 interface RatesSubComponent : AndroidInjector<RatesActivity> {
 
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<RatesActivity>()
+    @Subcomponent.Factory
+    interface Builder : AndroidInjector.Factory<RatesActivity>
 
 }

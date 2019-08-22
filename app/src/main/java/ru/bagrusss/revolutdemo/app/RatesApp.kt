@@ -14,9 +14,8 @@ import timber.log.Timber
 class RatesApp: DaggerApplication() {
 
     private val injector by lazy {
-        DaggerAppComponent.builder()
-                          .application(this)
-                          .build()
+        DaggerAppComponent.factory()
+                          .create(this)
     }
 
     override fun onCreate() {
