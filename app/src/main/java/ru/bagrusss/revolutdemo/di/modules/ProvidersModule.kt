@@ -2,7 +2,9 @@ package ru.bagrusss.revolutdemo.di.modules
 
 import dagger.Binds
 import dagger.Module
+import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
+import ru.bagrusss.revolutdemo.providers.impl.ResourcesProviderImpl
 import ru.bagrusss.revolutdemo.providers.impl.SchedulersProviderImpl
 import javax.inject.Singleton
 
@@ -15,5 +17,9 @@ interface ProvidersModule {
     @Binds
     @Singleton
     fun bindSchedulers(impl: SchedulersProviderImpl): SchedulersProvider
+
+    @Binds
+    @Singleton
+    fun bindResProvider(impl: ResourcesProviderImpl): ResourcesProvider
 
 }

@@ -4,6 +4,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import ru.bagrusss.revolutdemo.app.RatesApp
+import ru.bagrusss.revolutdemo.di.modules.AndroidModule
 import ru.bagrusss.revolutdemo.di.modules.GatewaysModule
 import ru.bagrusss.revolutdemo.di.modules.NetModule
 import ru.bagrusss.revolutdemo.di.modules.ProvidersModule
@@ -18,6 +19,8 @@ import javax.inject.Singleton
     modules = [
         NetModule::class,
         GatewaysModule::class,
+
+        AndroidModule::class,
 
         ProvidersModule::class,
 
