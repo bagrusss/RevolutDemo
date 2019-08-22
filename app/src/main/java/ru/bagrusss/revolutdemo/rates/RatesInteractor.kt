@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.rates
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.mvvm.Interactor
 import ru.bagrusss.revolutdemo.rates.models.Rate
@@ -12,5 +13,6 @@ interface RatesInteractor: Interactor {
     val ratesChanges: Observable<List<Rate>>
 
     fun changeBaseRate(newRate: String, currentCost: Double)
+    fun rateChanged(rate: Rate): Completable
 
 }

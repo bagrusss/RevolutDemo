@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.rates
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.repository.ConfigRepository
 import ru.bagrusss.revolutdemo.net.gateways.RatesRepository
@@ -19,6 +20,7 @@ class RatesInteractorImpl @Inject constructor(
 
     override val ratesChanges: Observable<List<Rate>> by lazy {
         Observable.interval(1, TimeUnit.SECONDS)
+                  .startWith(0)
                   .flatMapSingle {
                       val currentRate = configRepository.currentRate
                       ratesRepo.actualRates(currentRate.title, currentRate.cost)
@@ -30,5 +32,11 @@ class RatesInteractorImpl @Inject constructor(
     override fun changeBaseRate(newRate: String, currentCost: Double) {
 
     }
+
+    override fun rateChanged(rate: Rate) = Completable.fromAction {
+        configRepository.currentRate = rate
+    }
+    .subscribeOn(schedulers.io)
+    .observeOn(schedulers.ui)
 
 }

@@ -2,15 +2,18 @@ package ru.bagrusss.revolutdemo.rates
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.bagrusss.revolutdemo.R
 import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
 import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
+import javax.inject.Inject
 
 class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
 
-    private val ratesAdapter by lazy(::RatesAdapter)
+    @Inject lateinit var ratesAdapter: RatesAdapter
 
     override val layout = R.layout.activity_rates
 
@@ -20,8 +23,19 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
         binding.ratesList.run {
             layoutManager = LinearLayoutManager(context)
             adapter = ratesAdapter
+            itemAnimator = object : DefaultItemAnimator() {
+                override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
+                    if (viewHolder.oldPosition != 0 &&  viewHolder.adapterPosition == 0) {
+                        vm.ratesAnimationsEnded()
+                    }
+                }
+            }
         }
         vm.ratesChanges.observe(this, Observer(ratesAdapter::swap))
+        vm.ratesChanged.observe(this, Observer {
+            binding.ratesList.scrollToPosition(0)
+            ratesAdapter.moveItem(it)
+        })
     }
 
 }

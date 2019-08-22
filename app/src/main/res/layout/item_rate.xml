@@ -7,12 +7,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="16dp">
 
         <EditText
             android:id="@+id/rate_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:inputType="numberDecimal"
             android:minWidth="40dp"
             android:textColor="@color/black"

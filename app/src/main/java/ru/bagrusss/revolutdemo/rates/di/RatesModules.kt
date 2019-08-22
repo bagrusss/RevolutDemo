@@ -2,8 +2,11 @@ package ru.bagrusss.revolutdemo.rates.di
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import ru.bagrusss.revolutdemo.rates.RatesInteractor
 import ru.bagrusss.revolutdemo.rates.RatesInteractorImpl
+import ru.bagrusss.revolutdemo.rates.RatesVM
+import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
 import javax.inject.Scope
 
 /**
@@ -11,11 +14,20 @@ import javax.inject.Scope
  */
 
 @Module
-interface RatesModule {
+abstract class RatesModule {
 
     @Binds
     @RatesScope
-    fun bindIntractor(impl: RatesInteractorImpl): RatesInteractor
+    abstract fun bindIntractor(impl: RatesInteractorImpl): RatesInteractor
+
+}
+
+@Module
+class RatesViewModule {
+
+    @Provides
+    @RatesScope
+    fun provideRatesAdapter(vm: RatesVM) = RatesAdapter(vm)
 
 }
 

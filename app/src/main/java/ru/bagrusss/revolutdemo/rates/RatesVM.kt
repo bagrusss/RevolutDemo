@@ -14,20 +14,34 @@ import javax.inject.Inject
 @RatesScope
 class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<RatesInteractor>(interactor) {
 
+    private var animationsEnd = true
+
     @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
     @JvmField val errorEvent = MutableLiveData<Unit>()
+    @JvmField val ratesChanged = MutableLiveData<Int>()
 
     override fun created() {
         ratesChanges()
     }
 
+    fun ratesAnimationsEnded() {
+        animationsEnd = true
+    }
+
     fun ratesChanges() {
-        disposables += interactor.ratesChanges.subscribe({
-            ratesChanges.postValue(it)
-        }, {
-            errorEvent.postValue(Unit)
-            Timber.e(it)
-        })
+        disposables += interactor.ratesChanges
+                                 .filter { animationsEnd }
+                                 .subscribe(ratesChanges::postValue) {
+                                     errorEvent.postValue(Unit)
+                                     Timber.e(it)
+                                 }
+    }
+
+    fun ratesClicked(position: Int, rate: Rate) {
+        animationsEnd = false
+        ratesChanged.postValue(position)
+        disposables += interactor.rateChanged(rate)
+                                 .subscribe()
     }
 
 }
