@@ -38,10 +38,12 @@ class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<Ra
     }
 
     fun ratesClicked(position: Int, rate: String, cost: Float) {
-        animationsEnd = false
-        ratesChanged.postValue(position)
-        disposables += interactor.rateChanged(rate, cost)
-                                 .subscribe()
+        if (animationsEnd) {
+            animationsEnd = false
+            ratesChanged.postValue(position)
+            disposables += interactor.rateChanged(rate, cost)
+                                     .subscribe()
+        }
     }
 
 }
