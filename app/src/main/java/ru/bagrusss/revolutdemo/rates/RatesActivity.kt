@@ -10,6 +10,7 @@ import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
 import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
 import javax.inject.Inject
+import androidx.recyclerview.widget.SimpleItemAnimator
 
 class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
 
@@ -23,19 +24,20 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
         binding.ratesList.run {
             layoutManager = LinearLayoutManager(context)
             adapter = ratesAdapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             itemAnimator = object : DefaultItemAnimator() {
                 override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
-                    if (viewHolder.oldPosition != 0 &&  viewHolder.adapterPosition == 0) {
+                    if (viewHolder.oldPosition != 0 && viewHolder.adapterPosition == 0) {
                         vm.ratesAnimationsEnded()
                     }
                 }
             }
         }
         vm.ratesChanges.observe(this, Observer(ratesAdapter::swap))
-        vm.ratesChanged.observe(this, Observer {
-            binding.ratesList.scrollToPosition(0)
-            ratesAdapter.moveItem(it)
-        })
-    }
+            vm.ratesChanged.observe(this, Observer {
+                binding.ratesList.scrollToPosition(0)
+                ratesAdapter.moveItem(it)
+            })
+        }
 
 }

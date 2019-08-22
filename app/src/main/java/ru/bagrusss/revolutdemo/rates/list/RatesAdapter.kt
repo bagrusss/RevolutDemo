@@ -12,17 +12,17 @@ import javax.inject.Inject
 /**
  * Created by bagrusss on 13.08.2019
  */
-class RatesAdapter @Inject constructor(private val vm: RatesVM): RecyclerView.Adapter<RatesVH>() {
+class RatesAdapter @Inject constructor(private val vm: RatesVM): RecyclerView.Adapter<RateViewHolder>() {
 
-    private val rates = mutableListOf<Rate>()
+    private var rates = listOf<Rate>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RateViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemRateBinding.inflate(inflater, parent, false)
-        return RatesVH(binding, vm)
+        return RateViewHolder(binding, vm)
     }
 
-    override fun onBindViewHolder(holder: RatesVH, position: Int) {
+    override fun onBindViewHolder(holder: RateViewHolder, position: Int) {
         val rate = rates[position]
         holder.onBind(rate)
     }
@@ -30,9 +30,13 @@ class RatesAdapter @Inject constructor(private val vm: RatesVM): RecyclerView.Ad
     override fun getItemCount() = rates.size
 
     fun swap(newRates: List<Rate>) {
-        rates.clear()
-        rates.addAll(newRates)
-        notifyDataSetChanged()
+        if (rates.isEmpty()) {
+            rates = newRates
+            notifyDataSetChanged()
+        } else {
+            rates = newRates
+            notifyItemRangeChanged(1, newRates.size - 1)
+        }
     }
 
     fun moveItem(position: Int) {

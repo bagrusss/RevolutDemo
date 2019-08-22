@@ -9,8 +9,8 @@ import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
 /**
  * Created by bagrusss on 13.08.2019
  */
-class RatesVH(binding: ItemRateBinding,
-              vm: RatesVM): MvvmViewHolder<ItemRateBinding, RatesVM, Rate>(binding, vm) {
+class RateViewHolder(binding: ItemRateBinding,
+                     vm: RatesVM): MvvmViewHolder<ItemRateBinding, RatesVM, Rate>(binding, vm) {
 
     private lateinit var currentData: Rate
 
