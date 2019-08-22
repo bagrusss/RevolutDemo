@@ -9,30 +9,32 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <EditText
+            android:id="@+id/rate_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:minWidth="40dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rate_country"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rate_country" />
+
         <ImageView
             android:id="@+id/rate_country"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:src="@drawable/rate_stub"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/rate_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/rate_description"
-            app:layout_constraintStart_toEndOf="@+id/rate_country"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="EUR" />
-
-        <TextView
             android:id="@+id/rate_description"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/rate_country"
@@ -40,15 +42,18 @@
             tools:text="Euro" />
 
 
-        <EditText
-            android:id="@+id/rate_value"
+        <TextView
+            android:id="@+id/rate_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/rate_country"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/rate_country" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/rate_description"
+            app:layout_constraintStart_toEndOf="@+id/rate_country"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="EUR" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
