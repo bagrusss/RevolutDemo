@@ -22,6 +22,7 @@
     <string name="south_korea">South Korean won</string>
     <string name="mexico">Mexican Peso</string>
     <string name="malaysia">Malaysian Ringgit</string>
+    <string name="new_zealand">New Zealand Dollar</string>
     <string name="norway">Norwegian Krone</string>
     <string name="philippines">Philippine peso</string>
     <string name="poland">Poland złoty</string>
@@ -33,5 +34,6 @@
     <string name="turkey">Turkish lira</string>
     <string name="usa">United States Dollar</string>
     <string name="south_africa">South African Rand</string>
+    <string name="unknown_rate">Unknown rate</string>
 
 </resources>
