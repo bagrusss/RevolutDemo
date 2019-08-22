@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="74dp"
+            android:paddingEnd="74dp"
+            android:title="@string/app_name"
+            app:titleTextColor="@color/black" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rates_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>

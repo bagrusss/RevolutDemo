@@ -34,6 +34,8 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
                 }
             }
         }
+        setSupportActionBar(binding.toolbar)
+
         vm.ratesChanges.observe(this, Observer(ratesAdapter::swap))
         vm.ratesChanged.observe(this, Observer {
             binding.ratesList.scrollToPosition(0)
