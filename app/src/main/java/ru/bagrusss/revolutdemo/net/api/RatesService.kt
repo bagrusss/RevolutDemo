@@ -11,6 +11,6 @@ import ru.bagrusss.revolutdemo.net.models.RatesResponse
 interface RatesService {
 
     @GET("latest")
-    fun getRates(@Query("base") base: String = "EUR"): Single<RatesResponse>
+    fun getRates(@Query("base") base: String): Single<RatesResponse>
 
 }

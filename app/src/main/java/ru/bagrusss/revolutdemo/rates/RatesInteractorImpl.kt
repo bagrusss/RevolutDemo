@@ -13,14 +13,17 @@ import javax.inject.Inject
  */
 class RatesInteractorImpl @Inject constructor(
     private val ratesRepo: RatesRepository,
-    private val confirRepository: ConfigRepository,
+    private val configRepository: ConfigRepository,
     private val schedulers: SchedulersProvider
 ) : RatesInteractor {
 
     override val ratesChanges: Observable<List<Rate>> by lazy {
         Observable.interval(1, TimeUnit.SECONDS)
-            .flatMapSingle { ratesRepo.rates }
-            .observeOn(schedulers.ui)
+                  .flatMapSingle {
+                      val currentRate = configRepository.currentRate
+                      ratesRepo.actualRates(currentRate)
+                  }
+                  .observeOn(schedulers.ui)
     }
 
 }

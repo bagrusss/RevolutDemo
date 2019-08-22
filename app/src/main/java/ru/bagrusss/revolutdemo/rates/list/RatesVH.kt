@@ -1,6 +1,7 @@
 package ru.bagrusss.revolutdemo.rates.list
 
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
+import ru.bagrusss.revolutdemo.glide.GlideApp
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import ru.bagrusss.revolutdemo.util.recycler.BindingViewHolder
 
@@ -14,6 +15,9 @@ class RatesVH(binding: ItemRateBinding): BindingViewHolder<ItemRateBinding, Rate
             rateTitle.text = data.title
             rateDescription.text = data.description
             rateValue.setText(data.cost.toString())
+            GlideApp.with(rateCountry)
+                    .load(data.imgUrl)
+                    .into(rateCountry)
         }
     }
 

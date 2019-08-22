@@ -11,19 +11,24 @@ import javax.inject.Inject
 /**
  * Created by bagrusss on 13.08.2019
  */
-class RatesRepositoryImpl @Inject constructor(ratesService: RatesService,
-                                              private val resourcesProvider: ResourcesProvider): Gateway<RatesService>(ratesService), RatesRepository {
+class RatesRepositoryImpl @Inject constructor(
+    ratesService: RatesService,
+    private val resourcesProvider: ResourcesProvider
+) : Gateway<RatesService>(ratesService), RatesRepository {
 
-    override val rates: Single<List<Rate>>
-        get() = service.getRates()
-                       .map {
-                           it.rates.map { (k, v) ->
-                               Rate(
-                                   title = k,
-                                   description = "",
-                                   cost = v
-                               )
-                           }
-                       }
+    override fun actualRates(baseRate: String): Single<List<Rate>> {
+        return service.getRates(baseRate)
+                      .map {
+                          it.rates.map { (rate, cost) ->
+                              val (description, img) = resourcesProvider.rateImageAndDescription(rate)
+                              Rate(
+                                  title = rate,
+                                  description = description,
+                                  imgUrl = img,
+                                  cost = cost
+                              )
+                          }
+                      }
+    }
 
 }

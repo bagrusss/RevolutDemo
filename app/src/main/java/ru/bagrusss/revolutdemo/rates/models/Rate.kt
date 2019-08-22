@@ -7,5 +7,6 @@ package ru.bagrusss.revolutdemo.rates.models
 class Rate(
     @JvmField val title: String,
     @JvmField val description: String,
+    @JvmField val imgUrl: String,
     @JvmField val cost: Double
 )
