@@ -34,6 +34,7 @@
     <string name="turkey">Turkish lira</string>
     <string name="usa">United States Dollar</string>
     <string name="south_africa">South African Rand</string>
+    <string name="euro">Euro</string>
     <string name="unknown_rate">Unknown rate</string>
 
 </resources>
