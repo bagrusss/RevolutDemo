@@ -32,8 +32,8 @@ class NetModule {
     @Singleton
     fun provideOkHttp(): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
             .addNetworkInterceptor(StethoInterceptor())
             .build()
     }
