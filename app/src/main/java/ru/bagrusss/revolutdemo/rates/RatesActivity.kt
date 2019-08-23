@@ -2,15 +2,13 @@ package ru.bagrusss.revolutdemo.rates
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import ru.bagrusss.revolutdemo.R
 import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
 import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
+import ru.bagrusss.revolutdemo.rates.list.RatesItemAnimator
 import javax.inject.Inject
 
 class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
@@ -25,14 +23,7 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
         binding.ratesList.run {
             layoutManager = LinearLayoutManager(context)
             adapter = ratesAdapter
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            itemAnimator = object : DefaultItemAnimator() {
-                override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
-                    if (viewHolder.oldPosition != 0 && viewHolder.adapterPosition == 0) {
-                        vm.ratesAnimationsEnded()
-                    }
-                }
-            }
+            itemAnimator = RatesItemAnimator(vm)
         }
         setSupportActionBar(binding.toolbar)
 
