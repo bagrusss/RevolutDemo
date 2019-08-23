@@ -14,13 +14,10 @@ class RateViewHolder(binding: ItemRateBinding,
     private val itemData = RateItemData()
 
     init {
-        itemView.setOnClickListener {
-            val costText = itemData.cost.get()
-            vm.ratesClicked(adapterPosition, itemData.title.get()!!, costText!!.toFloat())
-            binding.rateValue.post {
-                binding.rateValue.requestFocus()
-                binding.rateValue.setSelection(costText.length)
-            }
+        itemView.setOnClickListener { handleClick() }
+        binding.rateValue.setOnFocusChangeListener { _, active ->
+            if (active)
+                handleClick()
         }
         binding.data = itemData
     }
@@ -31,6 +28,17 @@ class RateViewHolder(binding: ItemRateBinding,
             description.set(data.description)
             imgSrc.set(data.imgUrl)
             cost.set(data.cost.toString())
+        }
+    }
+
+    private fun handleClick() {
+        if (adapterPosition > 0) {
+            val costText = itemData.cost.get()
+            vm.ratesClicked(adapterPosition, itemData.title.get()!!, costText!!.toFloat())
+            binding.rateValue.post {
+                binding.rateValue.requestFocus()
+                binding.rateValue.setSelection(costText.length)
+            }
         }
     }
 
