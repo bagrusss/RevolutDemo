@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.rates
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
@@ -16,6 +17,8 @@ class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<Ra
 
     private var animationsEnd = true
 
+    @JvmField val showLoader = ObservableBoolean(true)
+
     @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
     @JvmField val errorEvent = MutableLiveData<Unit>()
     @JvmField val ratesChanged = MutableLiveData<Int>()
@@ -30,10 +33,13 @@ class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<Ra
 
     fun ratesChanges() {
         disposables += interactor.ratesChanges
+                                 .doOnSubscribe { showLoader.set(true) }
                                  .filter { animationsEnd }
+                                 .doOnNext { showLoader.set(false) }
                                  .subscribe(ratesChanges::postValue) {
                                      errorEvent.postValue(Unit)
                                      Timber.e(it)
+                                     showLoader.set(false)
                                  }
     }
 
