@@ -21,7 +21,6 @@
             android:id="@+id/rate_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="@{data.inputActive}"
             android:gravity="end"
             android:hint="@string/default_rate_hint"
             android:inputType="numberDecimal"

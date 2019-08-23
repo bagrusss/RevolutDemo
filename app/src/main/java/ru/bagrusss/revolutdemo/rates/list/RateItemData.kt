@@ -1,6 +1,5 @@
 package ru.bagrusss.revolutdemo.rates.list
 
-import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 
 /**
@@ -12,5 +11,4 @@ class RateItemData {
     @JvmField val description = ObservableField("")
     @JvmField val cost = ObservableField("")
     @JvmField val imgSrc = ObservableField("")
-    @JvmField val inputActive = ObservableBoolean()
 }

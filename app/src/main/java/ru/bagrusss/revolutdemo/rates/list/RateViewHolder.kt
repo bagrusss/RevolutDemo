@@ -15,7 +15,12 @@ class RateViewHolder(binding: ItemRateBinding,
 
     init {
         itemView.setOnClickListener {
-            vm.ratesClicked(adapterPosition, itemData.title.get()!!, itemData.cost.get()!!.toFloat())
+            val costText = itemData.cost.get()
+            vm.ratesClicked(adapterPosition, itemData.title.get()!!, costText!!.toFloat())
+            binding.rateValue.post {
+                binding.rateValue.requestFocus()
+                binding.rateValue.setSelection(costText.length)
+            }
         }
         binding.data = itemData
     }
