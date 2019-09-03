@@ -18,7 +18,7 @@ import ru.bagrusss.revolutdemo.rates.list.RateViewHolder
 interface RatesSubComponent : AndroidInjector<RatesActivity> {
 
     @Subcomponent.Factory
-    interface Builder : AndroidInjector.Factory<RatesActivity>
+    interface Factory : AndroidInjector.Factory<RatesActivity>
 
     fun inject(injectable: RateViewHolder)
 

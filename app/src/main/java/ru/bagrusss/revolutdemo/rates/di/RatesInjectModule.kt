@@ -17,6 +17,6 @@ interface RatesInjectModule {
     @Binds
     @IntoMap
     @ClassKey(RatesActivity::class)
-    fun bindMainActivityInjectorFactory(builder: RatesSubComponent.Builder): AndroidInjector.Factory<*>
+    fun bindMainActivityInjectorFactory(builder: RatesSubComponent.Factory): AndroidInjector.Factory<*>
 
 }
