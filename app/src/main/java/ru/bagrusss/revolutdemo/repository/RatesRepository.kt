@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.net.gateways
+package ru.bagrusss.revolutdemo.repository
 
 import io.reactivex.Single
 import ru.bagrusss.revolutdemo.rates.models.Rate

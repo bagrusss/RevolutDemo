@@ -3,7 +3,7 @@ package ru.bagrusss.revolutdemo.rates
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.repository.ConfigRepository
-import ru.bagrusss.revolutdemo.net.gateways.RatesRepository
+import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
@@ -26,16 +26,6 @@ class RatesInteractorImpl @Inject constructor(
                   .flatMapSingle {
                       val (rate, cost) = configRepository.currentBaseRate
                       ratesRepo.actualRates(rate, cost)
-                               .map {
-                                   val (description, img) = resProvider.rateImageAndDescription(rate)
-                                   val baseRate = Rate(
-                                       title = rate,
-                                       description = description,
-                                       imgUrl = img,
-                                       cost = cost
-                                   )
-                                   listOf(baseRate) + it
-                               }
                   }
                   .observeOn(schedulers.ui)
     }
