@@ -11,5 +11,5 @@ import java.math.BigDecimal
 class RatesResponse(
     @Json(name = "date") val date: String,
     @Json(name = "base") val base: String,
-    @Json(name = "rates") val rates: Map<String, Float>
+    @Json(name = "rates") val rates: Map<String, BigDecimal>
 )

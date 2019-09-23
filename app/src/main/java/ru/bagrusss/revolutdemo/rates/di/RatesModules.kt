@@ -3,6 +3,8 @@ package ru.bagrusss.revolutdemo.rates.di
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import ru.bagrusss.revolutdemo.mappers.impl.RatesMapper
+import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.rates.RatesInteractor
 import ru.bagrusss.revolutdemo.rates.RatesInteractorImpl
 import ru.bagrusss.revolutdemo.rates.RatesVM
@@ -14,11 +16,11 @@ import javax.inject.Scope
  */
 
 @Module
-abstract class RatesModule {
+interface RatesModule {
 
     @Binds
     @RatesScope
-    abstract fun bindIntractor(impl: RatesInteractorImpl): RatesInteractor
+    fun bindIntractor(impl: RatesInteractorImpl): RatesInteractor
 
 }
 
@@ -28,6 +30,15 @@ class RatesViewModule {
     @Provides
     @RatesScope
     fun provideRatesAdapter(vm: RatesVM) = RatesAdapter(vm)
+
+}
+
+@Module
+class MappersModule {
+
+    @Provides
+    @RatesScope
+    fun provideRatesMapper(resProvider: ResourcesProvider) = RatesMapper(resProvider)
 
 }
 

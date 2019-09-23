@@ -7,6 +7,7 @@ import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
 import ru.bagrusss.revolutdemo.rates.di.RatesScope
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import timber.log.Timber
+import java.math.BigDecimal
 import javax.inject.Inject
 
 /**
@@ -43,13 +44,18 @@ class RatesVM @Inject constructor(interactor: RatesInteractor): BaseViewModel<Ra
                                  }
     }
 
-    fun ratesClicked(position: Int, rate: String, cost: Float) {
+    fun ratesClicked(position: Int, rate: String, cost: BigDecimal) {
         if (animationsEnd) {
             animationsEnd = false
             ratesChanged.postValue(position)
             disposables += interactor.rateChanged(rate, cost)
                                      .subscribe()
         }
+    }
+
+    fun currentRateCostChanged(rate: String, cost: BigDecimal) {
+        disposables += interactor.rateChanged(rate, cost)
+                                 .subscribe()
     }
 
 }

@@ -11,7 +11,8 @@ import ru.bagrusss.revolutdemo.rates.list.RateViewHolder
 @Subcomponent(
     modules = [
         RatesModule::class,
-        RatesViewModule::class
+        RatesViewModule::class,
+        MappersModule::class
     ]
 )
 @RatesScope

@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.util.recycler
+package ru.bagrusss.revolutdemo.util.databinding
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
