@@ -24,7 +24,7 @@
             android:gravity="end"
             android:hint="@string/default_rate_hint"
             android:inputType="numberDecimal"
-            android:minWidth="40dp"
+            android:minWidth="32dp"
             android:maxLength="10"
             android:text="@={data.cost}"
             android:textColor="@color/black"

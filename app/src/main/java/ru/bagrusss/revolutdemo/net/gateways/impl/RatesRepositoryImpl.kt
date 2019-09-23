@@ -11,7 +11,6 @@ import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import java.math.BigDecimal
 import javax.inject.Inject
-import kotlin.math.round
 
 /**
  * Created by bagrusss on 13.08.2019
@@ -65,6 +64,10 @@ class RatesRepositoryImpl @Inject constructor(
         Single.fromCallable { currentBaseRate.first }
               .flatMap(service::getRates)
               .map { ratesMapper.map(it.rates) }
+              .doOnSuccess {
+                  cachedRates.clear()
+                  cachedRates.addAll(it)
+              }
     }
 
     override val currentCostChanges: Observable<List<Rate>> = ratesPublisher.hide()
