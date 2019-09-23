@@ -34,30 +34,27 @@ class RatesRepositoryImpl @Inject constructor(
             return cachedBaseRate
         }
         set(value) {
-            val (rate, cost) = value
-            val (currentRate, currentCost) = currentBaseRate
-            if (rate != currentRate) {
-                val (description, image) = resourcesProvider.rateImageAndDescription(rate)
-                val baseRate = Rate(
-                    title = rate,
-                    description = description,
-                    imgUrl = image,
-                    cost = cost
-                )
-                cachedRates.add(0, baseRate)
-                cachedRates.removeAll { it.title == currentRate }
-            } else {
-                val updated = cachedRates.map {
-                    val updatedCost = if (currentCost > BigDecimal.ZERO)
-                                          it.cost / currentCost * cost
-                                      else BigDecimal.ZERO
-                    it.copy(cost = updatedCost)
+            synchronized(cachedRates) {
+                val (newRate, newCost) = value
+                val (currentRate, currentCost) = currentBaseRate
+                if (newRate != currentRate) {
+                    val (description, image) = resourcesProvider.rateImageAndDescription(currentRate)
+                    val oldBaseRate = Rate(
+                        title = currentRate,
+                        description = description,
+                        imgUrl = image,
+                        cost = currentCost
+                    )
+                    val position = cachedRates.indexOfFirst { it.title == newRate }
+                    cachedRates[position] = oldBaseRate
+                } else {
+                    val updated = calculateRates(currentCost, newCost)
+                    cachedRates.clear()
+                    cachedRates.addAll(updated)
                 }
-                cachedRates.clear()
-                cachedRates.addAll(updated)
+                cachedBaseRate = value
+                ratesPublisher.onNext(cachedRates)
             }
-            cachedBaseRate = value
-            ratesPublisher.onNext(cachedRates)
         }
 
     override val actualRates by lazy {
@@ -65,12 +62,21 @@ class RatesRepositoryImpl @Inject constructor(
               .flatMap(service::getRates)
               .map { ratesMapper.map(it.rates) }
               .doOnSuccess {
-                  cachedRates.clear()
-                  cachedRates.addAll(it)
+                  synchronized(cachedRates) {
+                      cachedRates.clear()
+                      cachedRates.addAll(it)
+                  }
               }
     }
 
     override val currentCostChanges: Observable<List<Rate>> = ratesPublisher.hide()
+
+    private fun calculateRates(currentCost: BigDecimal, newCost: BigDecimal) = cachedRates.map {
+        val updatedCost = if (currentCost.abs() > BigDecimal.ZERO)
+                              it.cost * newCost / currentCost
+                          else BigDecimal.ZERO
+        it.copy(cost = updatedCost)
+    }
 
     companion object {
         private const val DEFAULT_TITLE = "EUR"

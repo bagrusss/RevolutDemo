@@ -53,7 +53,6 @@ class RateViewHolder(
                 cost.set(textCost)
                 binding.executePendingBindings()
                 setSelection(textCost.length)
-                addTextChangedListener(summWatcher)
             }
         } else {
             val textCost = if (data.cost.abs() > BigDecimal.ZERO) {
@@ -66,6 +65,7 @@ class RateViewHolder(
             }
             cost.set(textCost)
         }
+        binding.rateValue.addTextChangedListener(summWatcher)
     }
 
     private fun rateChanged() {
