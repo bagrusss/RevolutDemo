@@ -3,7 +3,7 @@ package ru.bagrusss.revolutdemo.di.modules
 import dagger.Binds
 import dagger.Module
 import ru.bagrusss.revolutdemo.repository.RatesRepository
-import ru.bagrusss.revolutdemo.net.gateways.impl.RatesRepositoryImpl
+import ru.bagrusss.revolutdemo.repository.impl.RatesRepositoryImpl
 import javax.inject.Singleton
 
 /**

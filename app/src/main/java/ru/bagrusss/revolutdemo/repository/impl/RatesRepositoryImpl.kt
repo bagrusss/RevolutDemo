@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.net.gateways.impl
+package ru.bagrusss.revolutdemo.repository.impl
 
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -9,7 +9,6 @@ import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.rates.models.Rate
-import java.math.BigDecimal
 import javax.inject.Inject
 
 /**
@@ -21,21 +20,13 @@ class RatesRepositoryImpl @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
-    private lateinit var cachedBaseRate: Pair<String, BigDecimal>
-
     private val cachedRates = mutableListOf<Rate>()
     private val ratesPublisher = PublishSubject.create<List<Rate>>()
 
-    override var currentBaseRate: Pair<String, BigDecimal>
-        get() {
-            if (!::cachedBaseRate.isInitialized) {
-                cachedBaseRate = DEFAULT_TITLE to DEFAULT_COST
-            }
-            return cachedBaseRate
-        }
+    override var currentBaseRate: Pair<String, Double> = DEFAULT_TITLE to DEFAULT_COST
         set(value) {
             synchronized(cachedRates) {
-                val (newRate, newCost) = value
+                val (newRate) = value
                 val (currentRate, currentCost) = currentBaseRate
                 if (newRate != currentRate) {
                     val (description, image) = resourcesProvider.rateImageAndDescription(currentRate)
@@ -47,12 +38,8 @@ class RatesRepositoryImpl @Inject constructor(
                     )
                     val position = cachedRates.indexOfFirst { it.title == newRate }
                     cachedRates[position] = oldBaseRate
-                } else {
-                    val updated = calculateRates(currentCost, newCost)
-                    cachedRates.clear()
-                    cachedRates.addAll(updated)
                 }
-                cachedBaseRate = value
+                field = value
                 ratesPublisher.onNext(cachedRates)
             }
         }
@@ -71,16 +58,9 @@ class RatesRepositoryImpl @Inject constructor(
 
     override val currentCostChanges: Observable<List<Rate>> = ratesPublisher.hide()
 
-    private fun calculateRates(currentCost: BigDecimal, newCost: BigDecimal) = cachedRates.map {
-        val updatedCost = if (currentCost.abs() > BigDecimal.ZERO)
-                              it.cost * newCost / currentCost
-                          else BigDecimal.ZERO
-        it.copy(cost = updatedCost)
-    }
-
     companion object {
         private const val DEFAULT_TITLE = "EUR"
-        private val DEFAULT_COST = 100.toBigDecimal()
+        private const val DEFAULT_COST = 100.0
     }
 
 }

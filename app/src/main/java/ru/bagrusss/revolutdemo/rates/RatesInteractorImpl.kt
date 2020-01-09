@@ -6,10 +6,8 @@ import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
-import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.round
 
 /**
  * Created by bagrusss on 13.08.2019
@@ -43,8 +41,15 @@ class RatesInteractorImpl @Inject constructor(
                   .observeOn(schedulers.ui)
     }
 
-    override fun rateChanged(rate: String, cost: BigDecimal) = Completable.fromAction {
-        ratesRepo.currentBaseRate = rate to cost
+    override fun rateChanged(rate: String, cost: String) = Completable.fromAction {
+        if (cost.isNotEmpty()) {
+            val newCost = cost.toDouble()
+            if (newCost != ratesRepo.currentBaseRate.second) {
+                ratesRepo.currentBaseRate = rate to cost.toDouble()
+            }
+        } else {
+            ratesRepo.currentBaseRate = rate to 0.0
+        }
     }
     .subscribeOn(schedulers.io)
     .observeOn(schedulers.ui)

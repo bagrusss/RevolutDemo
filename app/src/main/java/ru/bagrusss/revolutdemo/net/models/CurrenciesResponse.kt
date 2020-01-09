@@ -2,7 +2,6 @@ package ru.bagrusss.revolutdemo.net.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.math.BigDecimal
 
 /**
  * Created by bagrusss on 12.08.2019
@@ -11,5 +10,5 @@ import java.math.BigDecimal
 class RatesResponse(
     @Json(name = "date") val date: String,
     @Json(name = "base") val base: String,
-    @Json(name = "rates") val rates: Map<String, BigDecimal>
+    @Json(name = "rates") val rates: Map<String, Double>
 )
