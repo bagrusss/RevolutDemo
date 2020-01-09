@@ -1,12 +1,11 @@
 package ru.bagrusss.revolutdemo.rates.list
 
-import android.text.Editable
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
+import ru.bagrusss.revolutdemo.rates.RateEditWatcher
 import ru.bagrusss.revolutdemo.rates.RatesVM
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import ru.bagrusss.revolutdemo.util.format.formattedMoney
 import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
-import ru.bagrusss.revolutdemo.util.text.SimpleTextWatcher
 
 /**
  * Created by bagrusss on 13.08.2019
@@ -18,14 +17,13 @@ class RateViewHolder(
 
     private val itemData = RateItemData()
 
-    private val summWatcher = object : SimpleTextWatcher() {
-
-        override fun afterTextChanged(s: Editable) {
-            if (adapterPosition == 0) {
-                val title = itemData.title.get().orEmpty()
-                vm.currentRateCostChanged(title, s.toString())
-            }
-        }
+    private val currentRateWatcher = RateEditWatcher(
+        itemView.context.applicationContext,
+        this,
+        binding.rateValue
+    ) { newRateValue ->
+        val title = itemData.title.get().orEmpty()
+        vm.currentRateCostChanged(title, newRateValue)
     }
 
     init {
@@ -57,7 +55,7 @@ class RateViewHolder(
     }
 
     private fun updateRateValue(newRateValue: String) {
-        binding.rateValue.removeTextChangedListener(summWatcher)
+        binding.rateValue.removeTextChangedListener(currentRateWatcher)
         if (adapterPosition != 0) {
             itemData.cost.set(newRateValue)
         } else {
@@ -67,7 +65,7 @@ class RateViewHolder(
                 binding.rateValue.setSelection(newRateValue.length)
             }
         }
-        binding.rateValue.addTextChangedListener(summWatcher)
+        binding.rateValue.addTextChangedListener(currentRateWatcher)
     }
 
 }
