@@ -3,9 +3,9 @@ package ru.bagrusss.revolutdemo.rates
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
-import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.repository.RatesRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -45,7 +45,7 @@ class RatesInteractorImpl @Inject constructor(
         if (cost.isNotEmpty()) {
             val newCost = cost.toDouble()
             if (newCost != ratesRepo.currentBaseRate.second) {
-                ratesRepo.currentBaseRate = rate to cost.toDouble()
+                ratesRepo.currentBaseRate = rate to newCost
             }
         } else {
             ratesRepo.currentBaseRate = rate to 0.0
