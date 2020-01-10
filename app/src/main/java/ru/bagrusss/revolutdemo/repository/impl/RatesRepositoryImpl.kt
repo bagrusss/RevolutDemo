@@ -9,7 +9,7 @@ import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import ru.bagrusss.revolutdemo.repository.RatesRepository
-import java.util.*
+import ru.bagrusss.revolutdemo.util.collections.intersectionFromSecond
 import javax.inject.Inject
 
 /**
@@ -41,7 +41,8 @@ class RatesRepositoryImpl @Inject constructor(
             synchronized(cachedRates) {
                 val (newRate) = value
                 val newRateIndex = cachedRates.indexOfFirst { it.title == newRate }
-                Collections.swap(cachedRates, newRateIndex, 0)
+                val newRateItem = cachedRates.removeAt(newRateIndex)
+                cachedRates.add(0, newRateItem)
                 field = value
                 ratesPublisher.onNext(cachedRates)
             }
@@ -50,16 +51,19 @@ class RatesRepositoryImpl @Inject constructor(
     override val actualRates by lazy {
         Single.fromCallable { currentBaseRate.first }
             .flatMap(service::getRates)
-            .map { ratesMapper.map(it.rates) }
             .map {
+                val mappedRates = ratesMapper.map(it.rates)
                 synchronized(cachedRates) {
-                    if (it.isNotEmpty()) {
-                        cachedRates.subList(1, cachedRates.size)
-                            .clear()
-                        cachedRates.addAll(it)
+                    val elements = if (cachedRates.size == 1) {
+                        mappedRates
+                    } else {
+                        cachedRates.intersectionFromSecond(mappedRates) { oldRate, newRate -> oldRate.title == newRate.title }
                     }
+                    cachedRates.subList(1, cachedRates.size)
+                        .clear()
+                    cachedRates.addAll(elements)
                 }
-                cachedRates as List<Rate>
+                cachedRates.toList()
             }
     }
 

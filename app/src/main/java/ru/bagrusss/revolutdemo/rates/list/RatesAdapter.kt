@@ -2,20 +2,18 @@ package ru.bagrusss.revolutdemo.rates.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
 import ru.bagrusss.revolutdemo.rates.RatesVM
 import ru.bagrusss.revolutdemo.rates.models.Rate
-import java.util.*
 import javax.inject.Inject
-import androidx.recyclerview.widget.DiffUtil
-
 
 
 /**
  * Created by bagrusss on 13.08.2019
  */
-class RatesAdapter @Inject constructor(private val vm: RatesVM): RecyclerView.Adapter<RateViewHolder>() {
+class RatesAdapter @Inject constructor(private val vm: RatesVM) : RecyclerView.Adapter<RateViewHolder>() {
 
     private val rates = mutableListOf<Rate>()
 
@@ -41,8 +39,9 @@ class RatesAdapter @Inject constructor(private val vm: RatesVM): RecyclerView.Ad
     }
 
     fun moveItem(position: Int) {
-        Collections.swap(rates, position, 0)
         notifyItemMoved(position, 0)
+        val newRateItem = rates.removeAt(position)
+        rates.add(0, newRateItem)
     }
 
 }
