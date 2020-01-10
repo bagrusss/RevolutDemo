@@ -3,7 +3,6 @@ package ru.bagrusss.revolutdemo.mappers.impl
 import ru.bagrusss.revolutdemo.mappers.Mapper
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
-import java.math.BigDecimal
 import javax.inject.Inject
 
 /**
@@ -12,7 +11,7 @@ import javax.inject.Inject
 class RatesMapper @Inject constructor(private val resourcesProvider: ResourcesProvider): Mapper<Map<String, Double>, List<Rate>> {
 
     override fun map(from: Map<String, Double>): List<Rate> = from.map { (rate, cost) ->
-        val (description, img) = resourcesProvider.rateImageAndDescription(rate)
+        val (description, img) = resourcesProvider.rateDescriptionAndImage(rate)
         Rate(
             title = rate,
             description = description,

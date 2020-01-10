@@ -7,8 +7,9 @@ import ru.bagrusss.revolutdemo.mappers.impl.RatesMapper
 import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
-import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.repository.RatesRepository
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -16,29 +17,31 @@ import javax.inject.Inject
  */
 class RatesRepositoryImpl @Inject constructor(
     ratesService: RatesService,
-    private val ratesMapper: RatesMapper,
-    private val resourcesProvider: ResourcesProvider
+    resourcesProvider: ResourcesProvider,
+    private val ratesMapper: RatesMapper
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
-    private val cachedRates = mutableListOf<Rate>()
+    private val cachedRates: MutableList<Rate>
     private val ratesPublisher = PublishSubject.create<List<Rate>>()
+
+    init {
+        val (description, img) = resourcesProvider.rateDescriptionAndImage(DEFAULT_TITLE)
+        cachedRates = mutableListOf(
+            Rate(
+                title = DEFAULT_TITLE,
+                description = description,
+                imgUrl = img,
+                cost = 1.0
+            )
+        )
+    }
 
     override var currentBaseRate: Pair<String, Double> = DEFAULT_TITLE to DEFAULT_COST
         set(value) {
             synchronized(cachedRates) {
                 val (newRate) = value
-                val (currentRate, currentCost) = currentBaseRate
-                if (newRate != currentRate) {
-                    val (description, image) = resourcesProvider.rateImageAndDescription(currentRate)
-                    val oldBaseRate = Rate(
-                        title = currentRate,
-                        description = description,
-                        imgUrl = image,
-                        cost = currentCost
-                    )
-                    val position = cachedRates.indexOfFirst { it.title == newRate }
-                    cachedRates[position] = oldBaseRate
-                }
+                val newRateIndex = cachedRates.indexOfFirst { it.title == newRate }
+                Collections.swap(cachedRates, newRateIndex, 0)
                 field = value
                 ratesPublisher.onNext(cachedRates)
             }
@@ -46,14 +49,18 @@ class RatesRepositoryImpl @Inject constructor(
 
     override val actualRates by lazy {
         Single.fromCallable { currentBaseRate.first }
-              .flatMap(service::getRates)
-              .map { ratesMapper.map(it.rates) }
-              .doOnSuccess {
-                  synchronized(cachedRates) {
-                      cachedRates.clear()
-                      cachedRates.addAll(it)
-                  }
-              }
+            .flatMap(service::getRates)
+            .map { ratesMapper.map(it.rates) }
+            .map {
+                synchronized(cachedRates) {
+                    if (it.isNotEmpty()) {
+                        cachedRates.subList(1, cachedRates.size)
+                            .clear()
+                        cachedRates.addAll(it)
+                    }
+                }
+                cachedRates as List<Rate>
+            }
     }
 
     override val currentCostChanges: Observable<List<Rate>> = ratesPublisher.hide()

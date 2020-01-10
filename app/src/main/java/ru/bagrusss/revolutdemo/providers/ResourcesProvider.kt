@@ -5,6 +5,6 @@ package ru.bagrusss.revolutdemo.providers
  */
 interface ResourcesProvider {
 
-    fun rateImageAndDescription(rate: String): Pair<String, String>
+    fun rateDescriptionAndImage(rate: String): Pair<String, String>
 
 }

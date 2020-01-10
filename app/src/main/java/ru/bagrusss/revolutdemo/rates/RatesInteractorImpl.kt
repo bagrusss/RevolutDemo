@@ -2,7 +2,6 @@ package ru.bagrusss.revolutdemo.rates
 
 import io.reactivex.Completable
 import io.reactivex.Observable
-import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.rates.models.Rate
 import ru.bagrusss.revolutdemo.repository.RatesRepository
@@ -14,7 +13,6 @@ import javax.inject.Inject
  */
 class RatesInteractorImpl @Inject constructor(
     private val ratesRepo: RatesRepository,
-    private val resourcesProvider: ResourcesProvider,
     private val schedulers: SchedulersProvider
 ) : RatesInteractor {
 
@@ -24,19 +22,11 @@ class RatesInteractorImpl @Inject constructor(
                   .switchMapSingle { ratesRepo.actualRates }
                   .mergeWith(ratesRepo.currentCostChanges)
                   .map { rates ->
-                      val (baseRate, baseCost) = ratesRepo.currentBaseRate
-                      val (baseDescription, baseImg) = resourcesProvider.rateImageAndDescription(baseRate)
-                      val baseRateItem = Rate(
-                          title = baseRate,
-                          description = baseDescription,
-                          imgUrl = baseImg,
-                          cost = baseCost
-                      )
+                      val (_, baseCost) = ratesRepo.currentBaseRate
                       val newRates = rates.map {
-                          val finalCost = it.cost * baseCost
-                          it.copy(cost = finalCost)
+                          it.copy(cost = it.cost * baseCost)
                       }
-                      listOf(baseRateItem) + newRates
+                      newRates
                   }
                   .observeOn(schedulers.ui)
     }

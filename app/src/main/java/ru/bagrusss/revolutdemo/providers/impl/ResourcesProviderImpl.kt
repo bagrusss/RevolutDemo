@@ -48,7 +48,7 @@ class ResourcesProviderImpl @Inject constructor(private val context: Context) : 
         )
     }
 
-    override fun rateImageAndDescription(rate: String): Pair<String, String> {
+    override fun rateDescriptionAndImage(rate: String): Pair<String, String> {
         val description = ratesDescription[rate]
         return if (description != null) {
                    description to imageForRate(rate)
