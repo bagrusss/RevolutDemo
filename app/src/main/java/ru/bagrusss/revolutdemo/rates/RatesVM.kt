@@ -1,7 +1,10 @@
 package ru.bagrusss.revolutdemo.rates
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
+import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
 import ru.bagrusss.revolutdemo.rates.di.RatesScope
@@ -25,8 +28,16 @@ class RatesVM @Inject constructor(
     @JvmField val errorEvent = MutableLiveData<Unit>()
     @JvmField val ratesChanged = MutableLiveData<Int>()
 
-    override fun created() {
+    private var ratesDisposable = Disposables.empty()
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun started() {
         ratesChanges()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun stopped() {
+        ratesDisposable.dispose()
     }
 
     fun ratesAnimationsEnded() {
@@ -34,7 +45,7 @@ class RatesVM @Inject constructor(
     }
 
     fun ratesChanges() {
-        disposables += interactor.ratesChanges
+        ratesDisposable = interactor.ratesChanges
                                  .doOnSubscribe { showLoader.set(true) }
                                  .filter { animationsEnd }
                                  .doOnNext { showLoader.set(false) }
