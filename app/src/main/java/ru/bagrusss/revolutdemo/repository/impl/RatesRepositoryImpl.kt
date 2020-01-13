@@ -1,13 +1,13 @@
 package ru.bagrusss.revolutdemo.repository.impl
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapperImpl
 import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.util.collections.intersectionFromSecond
+import ru.bagrusss.revolutdemo.util.rx.single
 import javax.inject.Inject
 
 /**
@@ -29,16 +29,23 @@ class RatesRepositoryImpl @Inject constructor(
         set(value) {
             synchronized(cachedRates) {
                 val (newRate) = value
-                val newRateIndex = cachedRates.indexOfFirst { it.first == newRate }
-                val newRateItem = cachedRates.removeAt(newRateIndex)
-                cachedRates.add(0, newRateItem)
+                val (oldRate) = field
+                if (oldRate != newRate) {
+                    val newRateIndex = cachedRates.indexOfFirst { it.first == newRate }
+                    val newRateItem = cachedRates.removeAt(newRateIndex)
+                    cachedRates.add(0, newRateItem.copy(second = 1.0))
+                    for (i in 1 until cachedRates.size) {
+                        val rate = cachedRates[i]
+                        cachedRates[i] = rate.copy(second = rate.second / newRateItem.second)
+                    }
+                }
                 field = value
                 ratesPublisher.onNext(cachedRates)
             }
         }
 
     override val actualRates by lazy {
-        Single.fromCallable { currentBaseRate.first }
+        single { currentBaseRate.first }
             .flatMap(service::getRates)
             .map {
                 val mappedRates = ratesMapper.map(it.rates)
@@ -62,7 +69,7 @@ class RatesRepositoryImpl @Inject constructor(
 
     companion object {
         private const val DEFAULT_TITLE = "EUR"
-        private const val DEFAULT_COST = 100.0
+        private const val DEFAULT_COST = 1.0
     }
 
 }
