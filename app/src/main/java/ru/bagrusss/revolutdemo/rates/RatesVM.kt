@@ -59,9 +59,9 @@ class RatesVM @Inject constructor(
     fun ratesClicked(position: Int, rate: String, costText: String) {
         if (animationsEnd) {
             animationsEnd = false
-            ratesChanged.postValue(position)
             disposables += interactor.rateChanged(rate, costText)
                                      .subscribe()
+            ratesChanged.postValue(position)
         }
     }
 

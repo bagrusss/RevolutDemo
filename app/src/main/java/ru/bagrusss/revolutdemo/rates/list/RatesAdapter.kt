@@ -2,20 +2,23 @@ package ru.bagrusss.revolutdemo.rates.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
 import ru.bagrusss.revolutdemo.rates.RatesVM
 import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.util.recycler.DataAdapter
 import javax.inject.Inject
 
 
 /**
  * Created by bagrusss on 13.08.2019
  */
-class RatesAdapter @Inject constructor(private val vm: RatesVM) : RecyclerView.Adapter<RateViewHolder>() {
+class RatesAdapter @Inject constructor(
+    private val vm: RatesVM
+) : DataAdapter<Rate, RateViewHolder>() {
 
-    private val rates = mutableListOf<Rate>()
+    override val items = mutableListOf<Rate>()
+
+    override fun provideDiffUtilsCallback(newItems: List<Rate>) = RatesDiffCallback(items, newItems)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RateViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,25 +26,11 @@ class RatesAdapter @Inject constructor(private val vm: RatesVM) : RecyclerView.A
         return RateViewHolder(binding, vm)
     }
 
-    override fun onBindViewHolder(holder: RateViewHolder, position: Int) {
-        val rate = rates[position]
-        holder.onBind(rate)
-    }
-
-    override fun getItemCount() = rates.size
-
-    fun swap(newRates: List<Rate>) {
-        val callback = RatesDiffCallback(rates, newRates)
-        val diffResult = DiffUtil.calculateDiff(callback)
-        rates.clear()
-        rates.addAll(newRates)
-        diffResult.dispatchUpdatesTo(this)
-    }
-
     fun moveItem(position: Int) {
         notifyItemMoved(position, 0)
-        val newRateItem = rates.removeAt(position)
-        rates.add(0, newRateItem)
+        val newRateItem = items.removeAt(position)
+        items.add(0, newRateItem)
     }
+
 
 }

@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
-import ru.bagrusss.revolutdemo.providers.ResourcesProvider
+import ru.bagrusss.revolutdemo.mappers.rates.RatesMapperImpl
 import ru.bagrusss.revolutdemo.rates.RatesInteractor
 import ru.bagrusss.revolutdemo.rates.RatesInteractorImpl
 import ru.bagrusss.revolutdemo.rates.RatesVM
@@ -34,12 +34,11 @@ class RatesViewModule {
 }
 
 @Module
-class MappersModule {
+interface MappersModule {
 
-    @Provides
+    @Binds
     @RatesScope
-    fun provideRatesMapper(resProvider: ResourcesProvider) =
-        RatesMapper(resProvider)
+    fun provideRatesMapper(impl: RatesMapperImpl): RatesMapper
 
 }
 

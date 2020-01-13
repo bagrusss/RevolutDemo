@@ -6,8 +6,10 @@ import ru.bagrusss.revolutdemo.rates.models.Rate
 /**
  * Created by bagrusss on 23.08.2019
  */
-class RatesDiffCallback(private val oldCollection: List<Rate>,
-                        private val newCollection: List<Rate>): DiffUtil.Callback() {
+class RatesDiffCallback(
+    private val oldCollection: List<Rate>,
+    private val newCollection: List<Rate>
+) : DiffUtil.Callback() {
 
     override fun getOldListSize() = oldCollection.size
     override fun getNewListSize() = newCollection.size

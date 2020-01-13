@@ -10,17 +10,14 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * Created by bagrusss on 12.08.2019
  */
-abstract class BaseViewModel<I : Interactor>(@JvmField protected val interactor: I) : ViewModel(), LifecycleObserver {
+abstract class BaseViewModel<I : Interactor>(
+    @JvmField protected val interactor: I
+) : ViewModel(), LifecycleObserver {
 
     protected val disposables by lazy(::CompositeDisposable)
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    open fun created() {}
-
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    open fun destroyed() {
-        disposables.clear()
-    }
+    open fun destroyed() = disposables.clear()
 
 }
