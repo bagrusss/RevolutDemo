@@ -3,7 +3,7 @@ package ru.bagrusss.revolutdemo.rates.di
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import ru.bagrusss.revolutdemo.mappers.impl.RatesMapper
+import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.rates.RatesInteractor
 import ru.bagrusss.revolutdemo.rates.RatesInteractorImpl
@@ -38,7 +38,8 @@ class MappersModule {
 
     @Provides
     @RatesScope
-    fun provideRatesMapper(resProvider: ResourcesProvider) = RatesMapper(resProvider)
+    fun provideRatesMapper(resProvider: ResourcesProvider) =
+        RatesMapper(resProvider)
 
 }
 

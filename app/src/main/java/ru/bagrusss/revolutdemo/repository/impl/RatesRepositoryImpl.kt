@@ -3,7 +3,7 @@ package ru.bagrusss.revolutdemo.repository.impl
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import ru.bagrusss.revolutdemo.mappers.impl.RatesMapper
+import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
 import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider

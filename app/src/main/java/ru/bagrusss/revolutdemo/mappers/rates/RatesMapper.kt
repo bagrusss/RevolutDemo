@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.mappers.impl
+package ru.bagrusss.revolutdemo.mappers.rates
 
 import ru.bagrusss.revolutdemo.mappers.Mapper
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
