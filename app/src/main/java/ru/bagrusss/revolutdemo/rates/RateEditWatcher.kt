@@ -2,13 +2,9 @@ package ru.bagrusss.revolutdemo.rates
 
 import android.content.Context
 import android.widget.EditText
-import androidx.core.os.ConfigurationCompat
-import androidx.recyclerview.widget.RecyclerView
+import ru.bagrusss.revolutdemo.util.format.RateFormatter
 import ru.bagrusss.revolutdemo.util.text.SimpleTextWatcher
 import java.lang.ref.WeakReference
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import kotlin.math.min
 
 /**
@@ -16,20 +12,14 @@ import kotlin.math.min
  */
 class RateEditWatcher(
     context: Context,
-    private val holder: RecyclerView.ViewHolder,
     editText: EditText,
-    private val onRateValueChanged: (String) -> Unit
+    private val onValueChanged: (String) -> Unit
 ) : SimpleTextWatcher() {
 
     private val editTextReference = WeakReference(editText)
     private var oldText = ""
 
-    private val separator: String
-
-    init {
-        val locale = ConfigurationCompat.getLocales(context.resources.configuration).get(0)
-        separator = DecimalFormatSymbols.getInstance(locale).decimalSeparator.toString()
-    }
+    private val formatter = RateFormatter(context)
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
         oldText = s.toString()
@@ -37,56 +27,24 @@ class RateEditWatcher(
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         val editText = editTextReference.get()
-        if (holder.adapterPosition == 0 && editText != null) {
+        if (editText != null) {
             editText.removeTextChangedListener(this)
 
-            val newText = s.toString()
-            val pointPosition = newText.indexOf(separator)
-            val doubleValue = try {
-                newText.toDouble()
-            } catch (e: NumberFormatException) {
-                0.0
-            }
-            val newLen = newText.length
-            val formatted = when (newLen - 1 - pointPosition) {
-                newText.length -> formatter2.format(doubleValue)
-                2 -> formatter2.format(doubleValue).run {
-                    if (!contains(separator))
-                        this + separator + newText.substring(pointPosition + 1, newLen)
-                    else this
-                }
-                1 -> formatter1.format(doubleValue).run {
-                    if (!contains(separator))
-                        this + separator + newText.last()
-                    else this
-                }
-                0 -> formatter0.format(doubleValue)
-                else -> oldText
-            }
-            var selection = min(editText.selectionStart, formatted.length)
-            if (formatted == "0") {
-                selection = 1
-            }
-            editText.setText(formatted)
-            editText.setSelection(selection)
-
-            editText.addTextChangedListener(this)
+            val formatted = formatter.format(s.toString())
 
             if (oldText != formatted) {
-                onRateValueChanged(newText)
-            }
-        }
-    }
+                val selection = if (formatted == "0") {
+                    1
+                } else {
+                    min(editText.selectionStart, formatted.length)
+                }
 
-    companion object {
-        private val formatter2 = DecimalFormat("0.##").apply {
-            roundingMode = RoundingMode.HALF_UP
-        }
-        private val formatter1 = DecimalFormat("0.#").apply {
-            roundingMode = RoundingMode.HALF_UP
-        }
-        private val formatter0 = DecimalFormat("0.").apply {
-            roundingMode = RoundingMode.HALF_UP
+                editText.setText(formatted)
+                editText.setSelection(selection)
+                onValueChanged(formatted)
+            }
+
+            editText.addTextChangedListener(this)
         }
     }
 

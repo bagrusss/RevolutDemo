@@ -19,11 +19,12 @@ class RateViewHolder(
 
     private val currentRateWatcher = RateEditWatcher(
         itemView.context.applicationContext,
-        this,
         binding.rateValue
     ) { newRateValue ->
-        val title = itemData.title.get().orEmpty()
-        vm.currentRateCostChanged(title, newRateValue)
+        if (adapterPosition == 0) {
+            val title = itemData.title.get().orEmpty()
+            vm.currentRateCostChanged(title, newRateValue)
+        }
     }
 
     init {
@@ -55,17 +56,15 @@ class RateViewHolder(
     }
 
     private fun updateRateValue(newRateValue: String) {
-        binding.rateValue.removeTextChangedListener(currentRateWatcher)
         if (adapterPosition != 0) {
             itemData.cost.set(newRateValue)
         } else {
-            if (itemData.cost.get().isNullOrEmpty()) {
-                itemData.cost.set(newRateValue)
-                binding.executePendingBindings()
-                binding.rateValue.setSelection(newRateValue.length)
-            }
+            binding.rateValue.removeTextChangedListener(currentRateWatcher)
+            itemData.cost.set(newRateValue)
+            binding.executePendingBindings()
+            binding.rateValue.setSelection(newRateValue.length)
+            binding.rateValue.addTextChangedListener(currentRateWatcher)
         }
-        binding.rateValue.addTextChangedListener(currentRateWatcher)
     }
 
 }
