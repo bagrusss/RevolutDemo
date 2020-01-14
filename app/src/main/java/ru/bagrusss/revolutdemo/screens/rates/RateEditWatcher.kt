@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.rates
+package ru.bagrusss.revolutdemo.screens.rates
 
 import android.content.Context
 import android.widget.EditText

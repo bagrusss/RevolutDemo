@@ -1,8 +1,8 @@
-package ru.bagrusss.revolutdemo.rates.di
+package ru.bagrusss.revolutdemo.screens.rates.di
 
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
-import ru.bagrusss.revolutdemo.rates.RatesActivity
+import ru.bagrusss.revolutdemo.screens.rates.RatesActivity
 
 /**
  * Created by bagrusss on 13.08.2019

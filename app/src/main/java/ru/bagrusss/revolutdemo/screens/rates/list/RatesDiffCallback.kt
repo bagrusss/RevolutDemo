@@ -1,7 +1,7 @@
-package ru.bagrusss.revolutdemo.rates.list
+package ru.bagrusss.revolutdemo.screens.rates.list
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 
 /**
  * Created by bagrusss on 23.08.2019

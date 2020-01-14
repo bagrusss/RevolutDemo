@@ -8,7 +8,7 @@
 
         <variable
             name="data"
-            type="ru.bagrusss.revolutdemo.rates.list.RateItemData" />
+            type="ru.bagrusss.revolutdemo.screens.rates.list.RateItemData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

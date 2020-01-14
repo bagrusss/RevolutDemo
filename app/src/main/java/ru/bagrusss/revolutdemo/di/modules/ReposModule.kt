@@ -4,7 +4,6 @@ import dagger.Binds
 import dagger.Module
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.repository.impl.RatesRepositoryImpl
-import javax.inject.Singleton
 
 /**
  * Created by bagrusss on 13.08.2019

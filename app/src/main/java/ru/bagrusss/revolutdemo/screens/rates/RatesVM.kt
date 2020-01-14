@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.rates
+package ru.bagrusss.revolutdemo.screens.rates
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.Lifecycle
@@ -7,8 +7,8 @@ import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
-import ru.bagrusss.revolutdemo.rates.di.RatesScope
-import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.screens.rates.di.RatesScope
+import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,15 +22,10 @@ class RatesVM @Inject constructor(
 
     private var animationsEnd = true
 
-    @JvmField
-    val showLoader = ObservableBoolean(true)
-
-    @JvmField
-    val ratesChanges = MutableLiveData<List<Rate>>()
-    @JvmField
-    val errorEvent = MutableLiveData<Unit>()
-    @JvmField
-    val ratesChanged = MutableLiveData<Int>()
+    @JvmField val showLoader = ObservableBoolean(true)
+    @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
+    @JvmField val errorEvent = MutableLiveData<Unit>()
+    @JvmField val ratesChanged = MutableLiveData<Int>()
 
     private var ratesDisposable = Disposables.empty()
 

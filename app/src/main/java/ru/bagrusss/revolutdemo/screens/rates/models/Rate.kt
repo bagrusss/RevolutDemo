@@ -1,10 +1,10 @@
-package ru.bagrusss.revolutdemo.rates.models
+package ru.bagrusss.revolutdemo.screens.rates.models
 
 /**
  * Created by bagrusss on 13.08.2019
  */
 
-data class Rate(
+class Rate(
     @JvmField val title: String,
     @JvmField val description: String,
     @JvmField val imgUrl: String,

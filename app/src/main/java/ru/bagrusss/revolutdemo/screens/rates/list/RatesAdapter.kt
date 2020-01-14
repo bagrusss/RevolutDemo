@@ -1,10 +1,10 @@
-package ru.bagrusss.revolutdemo.rates.list
+package ru.bagrusss.revolutdemo.screens.rates.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
-import ru.bagrusss.revolutdemo.rates.RatesVM
-import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.screens.rates.RatesVM
+import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 import ru.bagrusss.revolutdemo.util.recycler.DataAdapter
 import javax.inject.Inject
 

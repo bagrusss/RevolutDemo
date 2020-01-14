@@ -1,9 +1,9 @@
-package ru.bagrusss.revolutdemo.rates
+package ru.bagrusss.revolutdemo.screens.rates
 
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.mvvm.Interactor
-import ru.bagrusss.revolutdemo.rates.models.Rate
+import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 import java.math.BigDecimal
 
 /**

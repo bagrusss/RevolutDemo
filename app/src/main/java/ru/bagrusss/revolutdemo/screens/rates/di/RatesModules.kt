@@ -1,14 +1,15 @@
-package ru.bagrusss.revolutdemo.rates.di
+package ru.bagrusss.revolutdemo.screens.rates.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapperImpl
-import ru.bagrusss.revolutdemo.rates.RatesInteractor
-import ru.bagrusss.revolutdemo.rates.RatesInteractorImpl
-import ru.bagrusss.revolutdemo.rates.RatesVM
-import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
+import ru.bagrusss.revolutdemo.screens.rates.RatesInteractor
+import ru.bagrusss.revolutdemo.screens.rates.RatesInteractorImpl
+import ru.bagrusss.revolutdemo.screens.rates.RatesVM
+import ru.bagrusss.revolutdemo.screens.rates.list.RatesAdapter
+import ru.bagrusss.revolutdemo.screens.rates.list.RatesItemAnimator
 import javax.inject.Scope
 
 /**
@@ -30,6 +31,10 @@ class RatesViewModule {
     @Provides
     @RatesScope
     fun provideRatesAdapter(vm: RatesVM) = RatesAdapter(vm)
+
+    @Provides
+    @RatesScope
+    fun provideRatesItemAnimator(vm: RatesVM) = RatesItemAnimator(vm)
 
 }
 

@@ -1,11 +1,11 @@
-package ru.bagrusss.revolutdemo.rates
+package ru.bagrusss.revolutdemo.screens.rates
 
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
-import ru.bagrusss.revolutdemo.rates.models.Rate
 import ru.bagrusss.revolutdemo.repository.RatesRepository
+import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -26,22 +26,26 @@ class RatesInteractorImpl @Inject constructor(
                   .map { ratesCost ->
                       val (baseTitle, baseCost) = ratesRepo.currentBaseRate
                       val (baseDescription, baseImg) = resourcesProvider.rateDescriptionAndImage(baseTitle)
-                      val rates = mutableListOf(Rate(
-                          title = baseTitle,
-                          description = baseDescription,
-                          imgUrl = baseImg,
-                          cost = baseCost
-                      ))
+                      val rates = mutableListOf(
+                          Rate(
+                              title = baseTitle,
+                              description = baseDescription,
+                              imgUrl = baseImg,
+                              cost = baseCost
+                          )
+                      )
 
                       for (i in 1 until ratesCost.size) {
                           val (title, cost) = ratesCost[i]
                           val (description, img) = resourcesProvider.rateDescriptionAndImage(title)
-                          rates.add(Rate(
-                              title = title,
-                              description = description,
-                              imgUrl = img,
-                              cost = cost * baseCost
-                          ))
+                          rates.add(
+                              Rate(
+                                  title = title,
+                                  description = description,
+                                  imgUrl = img,
+                                  cost = cost * baseCost
+                              )
+                          )
                       }
                       rates as List<Rate>
                   }

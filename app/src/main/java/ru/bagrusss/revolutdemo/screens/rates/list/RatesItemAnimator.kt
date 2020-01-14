@@ -1,8 +1,8 @@
-package ru.bagrusss.revolutdemo.rates.list
+package ru.bagrusss.revolutdemo.screens.rates.list
 
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
-import ru.bagrusss.revolutdemo.rates.RatesVM
+import ru.bagrusss.revolutdemo.screens.rates.RatesVM
 
 /**
  * Created by bagrusss on 23.08.2019

@@ -5,7 +5,7 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import ru.bagrusss.revolutdemo.app.RatesApp
 import ru.bagrusss.revolutdemo.di.modules.*
-import ru.bagrusss.revolutdemo.rates.di.RatesInjectModule
+import ru.bagrusss.revolutdemo.screens.rates.di.RatesInjectModule
 import javax.inject.Singleton
 
 

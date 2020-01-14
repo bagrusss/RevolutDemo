@@ -8,7 +8,7 @@
 
         <variable
             name="data"
-            type="ru.bagrusss.revolutdemo.rates.RatesVM" />
+            type="ru.bagrusss.revolutdemo.screens.rates.RatesVM" />
     </data>
 
     <LinearLayout

@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".rates.RatesActivity">
+        <activity android:name=".screens.rates.RatesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

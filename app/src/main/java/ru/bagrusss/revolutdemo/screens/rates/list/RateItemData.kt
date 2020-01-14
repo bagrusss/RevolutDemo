@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.rates.list
+package ru.bagrusss.revolutdemo.screens.rates.list
 
 import androidx.databinding.ObservableDouble
 import androidx.databinding.ObservableField

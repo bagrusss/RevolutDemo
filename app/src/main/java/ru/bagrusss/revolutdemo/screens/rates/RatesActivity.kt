@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.rates
+package ru.bagrusss.revolutdemo.screens.rates
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -7,13 +7,14 @@ import com.google.android.material.snackbar.Snackbar
 import ru.bagrusss.revolutdemo.R
 import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
-import ru.bagrusss.revolutdemo.rates.list.RatesAdapter
-import ru.bagrusss.revolutdemo.rates.list.RatesItemAnimator
+import ru.bagrusss.revolutdemo.screens.rates.list.RatesAdapter
+import ru.bagrusss.revolutdemo.screens.rates.list.RatesItemAnimator
 import javax.inject.Inject
 
 class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
 
     @Inject lateinit var ratesAdapter: RatesAdapter
+    @Inject lateinit var ratesItemAnimator: RatesItemAnimator
 
     override val layout = R.layout.activity_rates
 
@@ -23,7 +24,7 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
         binding.ratesList.run {
             layoutManager = LinearLayoutManager(context)
             adapter = ratesAdapter
-            itemAnimator = RatesItemAnimator(vm)
+            itemAnimator = ratesItemAnimator
         }
         setSupportActionBar(binding.toolbar)
 
