@@ -50,8 +50,8 @@ android {
             shrinkResources false
         }
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
 
             signingConfig signingConfigs.release
 
@@ -137,7 +137,7 @@ dependencies {
     // DEV
     //
     ////////////////
-    implementation "com.facebook.stetho:stetho-okhttp3:$stetho"
+    debugImplementation "com.facebook.stetho:stetho-okhttp3:$stetho"
     implementation "com.jakewharton.timber:timber:$timber"
 
     /////////////////
