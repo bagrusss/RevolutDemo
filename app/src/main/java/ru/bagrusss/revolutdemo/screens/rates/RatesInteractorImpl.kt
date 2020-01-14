@@ -61,12 +61,12 @@ class RatesInteractorImpl @Inject constructor(
             .hide()
             .observeOn(schedulers.computation)
             .doOnNext { (rate, cost) ->
-                if (cost.isNotEmpty()) {
+                try {
                     val newCost = cost.toBigDecimal()
                     if (newCost != ratesRepo.currentBaseRate.second) {
                         ratesRepo.currentBaseRate = rate to newCost
                     }
-                } else {
+                } catch (e: NumberFormatException) {
                     ratesRepo.currentBaseRate = rate to BigDecimal.ZERO
                 }
             }
