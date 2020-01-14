@@ -40,5 +40,6 @@
     <string name="default_rate_hint">0</string>
     <string name="error_text">Something went wrong ¯\\_(ツ)_/¯</string>
     <string name="repeat">Repeat</string>
+    <string name="rate_icon">Rate\'s icon</string>
 
 </resources>

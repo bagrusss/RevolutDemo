@@ -33,7 +33,6 @@ class RatesInteractorImpl @Inject constructor(
                           cost = baseCost
                       ))
 
-
                       for (i in 1 until ratesCost.size) {
                           val (title, cost) = ratesCost[i]
                           val (description, img) = resourcesProvider.rateDescriptionAndImage(title)

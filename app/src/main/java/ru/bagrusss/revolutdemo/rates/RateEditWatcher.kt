@@ -9,7 +9,6 @@ import java.lang.ref.WeakReference
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
 import kotlin.math.min
 
 /**
@@ -26,12 +25,10 @@ class RateEditWatcher(
     private var oldText = ""
 
     private val separator: String
-    private val format: NumberFormat
 
     init {
         val locale = ConfigurationCompat.getLocales(context.resources.configuration).get(0)
         separator = DecimalFormatSymbols.getInstance(locale).decimalSeparator.toString()
-        format = NumberFormat.getInstance(locale)
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

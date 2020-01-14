@@ -21,6 +21,7 @@
             android:id="@+id/rate_country"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:contentDescription="@string/rate_icon"
             android:src="@drawable/rate_stub"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,6 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
