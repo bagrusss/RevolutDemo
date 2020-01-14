@@ -21,3 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 -include proguard/moshi.pro
+-include proguard/okhttp.pro
+-include proguard/retrofit2.pro
+-include proguard/glide.pro
