@@ -3,12 +3,12 @@ package ru.bagrusss.revolutdemo.repository.impl
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
-import ru.bagrusss.revolutdemo.mappers.rates.RatesMapperImpl
 import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.util.collections.intersectionFromSecond
 import ru.bagrusss.revolutdemo.util.rx.single
+import java.math.BigDecimal
 import javax.inject.Inject
 
 /**
@@ -19,14 +19,14 @@ class RatesRepositoryImpl @Inject constructor(
     private val ratesMapper: RatesMapper
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
-    private val cachedRates: MutableList<Pair<String, Double>>
-    private val ratesPublisher = PublishSubject.create<List<Pair<String, Double>>>()
+    private val cachedRates: MutableList<Pair<String, BigDecimal>>
+    private val ratesPublisher = PublishSubject.create<List<Pair<String, BigDecimal>>>()
 
     init {
         cachedRates = mutableListOf(DEFAULT_TITLE to DEFAULT_COST)
     }
 
-    override var currentBaseRate: Pair<String, Double> = cachedRates.first()
+    override var currentBaseRate: Pair<String, BigDecimal> = cachedRates.first()
         set(value) {
             synchronized(cachedRates) {
                 val (newRate) = value
@@ -34,7 +34,7 @@ class RatesRepositoryImpl @Inject constructor(
                 if (oldRate != newRate) {
                     val newRateIndex = cachedRates.indexOfFirst { it.first == newRate }
                     val newRateItem = cachedRates.removeAt(newRateIndex)
-                    cachedRates.add(0, newRateItem.copy(second = 1.0))
+                    cachedRates.add(0, newRateItem.copy(second = BigDecimal.ONE))
                     for (i in 1 until cachedRates.size) {
                         val rate = cachedRates[i]
                         cachedRates[i] = rate.copy(second = rate.second / newRateItem.second)
@@ -66,11 +66,11 @@ class RatesRepositoryImpl @Inject constructor(
             }
     }
 
-    override val currentCostChanges: Observable<List<Pair<String, Double>>> = ratesPublisher.hide()
+    override val currentCostChanges: Observable<List<Pair<String, BigDecimal>>> = ratesPublisher.hide()
 
     companion object {
         private const val DEFAULT_TITLE = "EUR"
-        private const val DEFAULT_COST = 1.0
+        private val DEFAULT_COST = BigDecimal.ONE
     }
 
 }

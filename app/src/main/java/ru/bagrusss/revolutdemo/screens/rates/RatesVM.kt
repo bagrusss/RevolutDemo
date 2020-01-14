@@ -27,14 +27,18 @@ class RatesVM @Inject constructor(
     @JvmField val errorEvent = MutableLiveData<Unit>()
     @JvmField val ratesChanged = MutableLiveData<Int>()
 
-    private val ratesDisposable = CompositeDisposable()
+    private val ratesDisposables = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun started() = ratesChanges()
+    fun started() {
+        ratesChanges()
+        ratesDisposables += interactor.rateChange
+            .subscribe()
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stopped() {
-        ratesDisposable.clear()
+        ratesDisposables.clear()
     }
 
     fun ratesAnimationsEnded() {
@@ -42,7 +46,7 @@ class RatesVM @Inject constructor(
     }
 
     fun ratesChanges() {
-        ratesDisposable += interactor.ratesUpdates
+        ratesDisposables += interactor.ratesUpdates
             .doOnSubscribe { showLoader.set(true) }
             .filter { animationsEnd }
             .doOnNext { showLoader.set(false) }
@@ -50,10 +54,8 @@ class RatesVM @Inject constructor(
                 errorEvent.postValue(Unit)
                 Timber.e(it)
                 showLoader.set(false)
-                ratesDisposable.clear()
             }
-        ratesDisposable += interactor.rateChange
-            .subscribe()
+
     }
 
     fun ratesClicked(position: Int, rate: String, costText: String) {

@@ -7,6 +7,7 @@ import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.screens.rates.models.Rate
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -61,12 +62,12 @@ class RatesInteractorImpl @Inject constructor(
             .observeOn(schedulers.computation)
             .doOnNext { (rate, cost) ->
                 if (cost.isNotEmpty()) {
-                    val newCost = cost.toDouble()
+                    val newCost = cost.toBigDecimal()
                     if (newCost != ratesRepo.currentBaseRate.second) {
                         ratesRepo.currentBaseRate = rate to newCost
                     }
                 } else {
-                    ratesRepo.currentBaseRate = rate to 0.0
+                    ratesRepo.currentBaseRate = rate to BigDecimal.ZERO
                 }
             }
             .ignoreElements()
