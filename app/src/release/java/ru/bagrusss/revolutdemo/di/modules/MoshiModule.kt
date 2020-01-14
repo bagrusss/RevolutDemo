@@ -1,7 +1,6 @@
 package ru.bagrusss.revolutdemo.di.modules
 
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -14,7 +13,7 @@ class MoshiModule {
 
     @Provides
     @Singleton
-    fun provideMoshi() = Moshi.Builder()
+    fun provideMoshi(): Moshi = Moshi.Builder()
         .build()
 
 }
