@@ -5,10 +5,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
 import ru.bagrusss.revolutdemo.screens.rates.di.RatesScope
 import ru.bagrusss.revolutdemo.screens.rates.models.Rate
+import ru.bagrusss.revolutdemo.util.rx.plusAssign
 import timber.log.Timber
 import javax.inject.Inject
 
