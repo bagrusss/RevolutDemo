@@ -4,7 +4,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
-import io.reactivex.disposables.Disposables
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import ru.bagrusss.revolutdemo.mvvm.BaseViewModel
 import ru.bagrusss.revolutdemo.screens.rates.di.RatesScope
@@ -27,16 +27,14 @@ class RatesVM @Inject constructor(
     @JvmField val errorEvent = MutableLiveData<Unit>()
     @JvmField val ratesChanged = MutableLiveData<Int>()
 
-    private var ratesDisposable = Disposables.empty()
+    private val ratesDisposable = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun started() {
-        ratesChanges()
-    }
+    fun started() = ratesChanges()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stopped() {
-        ratesDisposable.dispose()
+        ratesDisposable.clear()
     }
 
     fun ratesAnimationsEnded() {
@@ -44,7 +42,7 @@ class RatesVM @Inject constructor(
     }
 
     fun ratesChanges() {
-        ratesDisposable = interactor.ratesChanges
+        ratesDisposable += interactor.ratesUpdates
             .doOnSubscribe { showLoader.set(true) }
             .filter { animationsEnd }
             .doOnNext { showLoader.set(false) }
@@ -52,21 +50,22 @@ class RatesVM @Inject constructor(
                 errorEvent.postValue(Unit)
                 Timber.e(it)
                 showLoader.set(false)
+                ratesDisposable.clear()
             }
+        ratesDisposable += interactor.rateChange
+            .subscribe()
     }
 
     fun ratesClicked(position: Int, rate: String, costText: String) {
         if (animationsEnd) {
             animationsEnd = false
-            disposables += interactor.rateChanged(rate, costText)
-                .subscribe()
+            currentRateCostChanged(rate, costText)
             ratesChanged.postValue(position)
         }
     }
 
     fun currentRateCostChanged(rate: String, costText: String) {
-        disposables += interactor.rateChanged(rate, costText)
-            .subscribe()
+        interactor.rateChanged(rate, costText)
     }
 
 }

@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -24,10 +22,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    androidExtensions {
+    /*androidExtensions {
         experimental = true
         features = ["parcelize"]
-    }
+    }*/
 
     dataBinding {
         enabled = true
@@ -44,12 +42,15 @@ android {
 
     buildTypes {
         debug {
+            debuggable true
             applicationIdSuffix ".debug"
 
             minifyEnabled false
             shrinkResources false
         }
         release {
+            debuggable false
+
             minifyEnabled true
             shrinkResources true
 
