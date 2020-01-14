@@ -18,15 +18,19 @@ import javax.inject.Inject
 @RatesScope
 class RatesVM @Inject constructor(
     interactor: RatesInteractor
-): BaseViewModel<RatesInteractor>(interactor) {
+) : BaseViewModel<RatesInteractor>(interactor) {
 
     private var animationsEnd = true
 
-    @JvmField val showLoader = ObservableBoolean(true)
+    @JvmField
+    val showLoader = ObservableBoolean(true)
 
-    @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
-    @JvmField val errorEvent = MutableLiveData<Unit>()
-    @JvmField val ratesChanged = MutableLiveData<Int>()
+    @JvmField
+    val ratesChanges = MutableLiveData<List<Rate>>()
+    @JvmField
+    val errorEvent = MutableLiveData<Unit>()
+    @JvmField
+    val ratesChanged = MutableLiveData<Int>()
 
     private var ratesDisposable = Disposables.empty()
 
@@ -46,28 +50,28 @@ class RatesVM @Inject constructor(
 
     fun ratesChanges() {
         ratesDisposable = interactor.ratesChanges
-                                 .doOnSubscribe { showLoader.set(true) }
-                                 .filter { animationsEnd }
-                                 .doOnNext { showLoader.set(false) }
-                                 .subscribe(ratesChanges::postValue) {
-                                     errorEvent.postValue(Unit)
-                                     Timber.e(it)
-                                     showLoader.set(false)
-                                 }
+            .doOnSubscribe { showLoader.set(true) }
+            .filter { animationsEnd }
+            .doOnNext { showLoader.set(false) }
+            .subscribe(ratesChanges::postValue) {
+                errorEvent.postValue(Unit)
+                Timber.e(it)
+                showLoader.set(false)
+            }
     }
 
     fun ratesClicked(position: Int, rate: String, costText: String) {
         if (animationsEnd) {
             animationsEnd = false
             disposables += interactor.rateChanged(rate, costText)
-                                     .subscribe()
+                .subscribe()
             ratesChanged.postValue(position)
         }
     }
 
     fun currentRateCostChanged(rate: String, costText: String) {
         disposables += interactor.rateChanged(rate, costText)
-                                 .subscribe()
+            .subscribe()
     }
 
 }

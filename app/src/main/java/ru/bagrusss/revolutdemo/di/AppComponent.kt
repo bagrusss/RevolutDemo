@@ -4,10 +4,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import ru.bagrusss.revolutdemo.app.RatesApp
-import ru.bagrusss.revolutdemo.di.modules.AndroidModule
-import ru.bagrusss.revolutdemo.di.modules.NetModule
-import ru.bagrusss.revolutdemo.di.modules.ProvidersModule
-import ru.bagrusss.revolutdemo.di.modules.ReposModule
+import ru.bagrusss.revolutdemo.di.modules.*
 import ru.bagrusss.revolutdemo.rates.di.RatesInjectModule
 import javax.inject.Singleton
 
@@ -23,6 +20,7 @@ import javax.inject.Singleton
 
         ProvidersModule::class,
         ReposModule::class,
+        MappersModule::class,
 
         AndroidInjectionModule::class,
         RatesInjectModule::class

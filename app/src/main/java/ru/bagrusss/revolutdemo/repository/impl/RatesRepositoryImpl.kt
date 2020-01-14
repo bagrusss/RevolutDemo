@@ -2,6 +2,7 @@ package ru.bagrusss.revolutdemo.repository.impl
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import ru.bagrusss.revolutdemo.mappers.rates.RatesMapper
 import ru.bagrusss.revolutdemo.mappers.rates.RatesMapperImpl
 import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
@@ -15,7 +16,7 @@ import javax.inject.Inject
  */
 class RatesRepositoryImpl @Inject constructor(
     ratesService: RatesService,
-    private val ratesMapper: RatesMapperImpl
+    private val ratesMapper: RatesMapper
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
     private val cachedRates: MutableList<Pair<String, Double>>

@@ -33,15 +33,6 @@ class RatesViewModule {
 
 }
 
-@Module
-interface MappersModule {
-
-    @Binds
-    @RatesScope
-    fun provideRatesMapper(impl: RatesMapperImpl): RatesMapper
-
-}
-
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class RatesScope

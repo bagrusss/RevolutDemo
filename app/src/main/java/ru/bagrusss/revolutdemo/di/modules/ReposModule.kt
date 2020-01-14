@@ -13,7 +13,6 @@ import javax.inject.Singleton
 interface ReposModule {
 
     @Binds
-    @Singleton
     fun bindRatesGateway(impl: RatesRepositoryImpl): RatesRepository
 
 }
