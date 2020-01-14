@@ -4,12 +4,11 @@ package ru.bagrusss.revolutdemo.util.format
  * Created by bagrusss on 09.01.2020
  */
 
-val Double.formattedMoney: String
+val Double.preFormattedMoney: String
     get() {
-        val format = if (this % 1 == 0.0) {
-            "%.0f"
+        return if (this == 0.0) {
+            "0"
         } else {
-            "%.2f"
+            this.toString()
         }
-        return String.format(format, this)
     }
