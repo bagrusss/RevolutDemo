@@ -22,25 +22,26 @@ class RateFormatter(
     }
 
     private val formatter2 = DecimalFormat("0$separator##").apply {
-        roundingMode = RoundingMode.HALF_UP
+        roundingMode = RoundingMode.DOWN
     }
+
     private val formatter1 = DecimalFormat("0$separator#").apply {
-        roundingMode = RoundingMode.HALF_UP
+        roundingMode = RoundingMode.DOWN
     }
     private val formatter0 = DecimalFormat("0$separator").apply {
-        roundingMode = RoundingMode.HALF_UP
+        roundingMode = RoundingMode.DOWN
     }
 
     fun format(text: String): String {
-        val pointPosition = text.indexOf(separator)
+        val separatorPosition = text.indexOf(separator)
         val doubleValue = try {
             text.toDouble()
         } catch (e: NumberFormatException) {
             0.0
         }
-        val newLen = text.length
-        return when (newLen - 1 - pointPosition) {
-            text.length -> formatter2.format(doubleValue)
+        val textLen = text.length
+        return when (textLen - 1 - separatorPosition) {
+            textLen -> formatter1.format(doubleValue)
             0 -> formatter0.format(doubleValue)
             1 -> formatter1.format(doubleValue).run {
                 if (!contains(separator))
@@ -48,9 +49,17 @@ class RateFormatter(
                 else this
             }
             else -> formatter2.format(doubleValue).run {
-                if (!contains(separator))
-                    this + separator + text.substring(pointPosition + 1, newLen)
-                else this
+                val formattedSeparatorPosition = indexOf(separator)
+                if (formattedSeparatorPosition == -1) {
+                    this + text.substring(separatorPosition, separatorPosition + 3)
+                } else {
+                    if (length - formattedSeparatorPosition < textLen - separatorPosition) {
+                        val lastPart = text.substring(separatorPosition + 1, separatorPosition + 3)
+                        substring(0, formattedSeparatorPosition + 1) + lastPart
+                    } else {
+                        this
+                    }
+                }
             }
         }
     }

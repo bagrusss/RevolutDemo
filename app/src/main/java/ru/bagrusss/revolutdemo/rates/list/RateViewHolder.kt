@@ -4,7 +4,6 @@ import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
 import ru.bagrusss.revolutdemo.rates.RateEditWatcher
 import ru.bagrusss.revolutdemo.rates.RatesVM
 import ru.bagrusss.revolutdemo.rates.models.Rate
-import ru.bagrusss.revolutdemo.util.format.formattedMoney
 import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
 
 /**
@@ -34,36 +33,24 @@ class RateViewHolder(
                 rateChanged()
         }
         binding.data = itemData
+        binding.rateValue.addTextChangedListener(currentRateWatcher)
     }
 
     override fun onBind(data: Rate) = itemData.run {
         title.set(data.title)
         description.set(data.description)
         imgSrc.set(data.imgUrl)
-        updateRateValue(data.cost.formattedMoney)
+        cost.set(data.cost)
     }
 
     private fun rateChanged() {
-        val costText = itemData.cost.get()
+        val costText = binding.rateValue.text.toString()
         val title = itemData.title.get()
-        if (adapterPosition > 0 && title != null && !costText.isNullOrEmpty()) {
+        if (adapterPosition > 0 && title != null && costText.isNotEmpty()) {
             vm.ratesClicked(adapterPosition, title, costText)
             binding.rateValue.post {
                 binding.rateValue.requestFocus()
-                binding.rateValue.setSelection(costText.length)
             }
-        }
-    }
-
-    private fun updateRateValue(newRateValue: String) {
-        if (adapterPosition != 0) {
-            itemData.cost.set(newRateValue)
-        } else {
-            binding.rateValue.removeTextChangedListener(currentRateWatcher)
-            itemData.cost.set(newRateValue)
-            binding.executePendingBindings()
-            binding.rateValue.setSelection(newRateValue.length)
-            binding.rateValue.addTextChangedListener(currentRateWatcher)
         }
     }
 

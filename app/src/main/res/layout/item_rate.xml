@@ -81,10 +81,10 @@
                 android:hint="@string/default_rate_hint"
                 android:inputType="numberDecimal"
                 android:minWidth="32dp"
-                android:text="@={data.cost}"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                bind:rate_cost="@{data.cost}" />
 
         </RelativeLayout>
 

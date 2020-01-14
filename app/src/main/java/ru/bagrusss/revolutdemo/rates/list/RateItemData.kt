@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.rates.list
 
+import androidx.databinding.ObservableDouble
 import androidx.databinding.ObservableField
 
 /**
@@ -9,6 +10,6 @@ import androidx.databinding.ObservableField
 class RateItemData {
     @JvmField val title = ObservableField("")
     @JvmField val description = ObservableField("")
-    @JvmField val cost = ObservableField("")
     @JvmField val imgSrc = ObservableField("")
+    @JvmField val cost = ObservableDouble(0.0)
 }
