@@ -22,14 +22,6 @@ class NetModule {
 
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-    }
-
-    @Provides
-    @Singleton
     fun provideOkHttp(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)

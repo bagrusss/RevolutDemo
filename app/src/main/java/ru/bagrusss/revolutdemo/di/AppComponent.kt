@@ -17,6 +17,7 @@ import javax.inject.Singleton
         AndroidModule::class,
 
         NetModule::class,
+        MoshiModule::class,
 
         ProvidersModule::class,
         ReposModule::class,
