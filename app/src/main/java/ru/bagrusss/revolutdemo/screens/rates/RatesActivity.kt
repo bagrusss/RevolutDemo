@@ -3,7 +3,6 @@ package ru.bagrusss.revolutdemo.screens.rates
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import ru.bagrusss.revolutdemo.R
 import ru.bagrusss.revolutdemo.databinding.ActivityRatesBinding
 import ru.bagrusss.revolutdemo.mvvm.MvvmActivity
@@ -35,11 +34,12 @@ class RatesActivity : MvvmActivity<ActivityRatesBinding, RatesVM>() {
             binding.ratesList.scrollToPosition(0)
             ratesAdapter.moveItem(it)
         })
-        vm.errorEvent.observe(this, Observer {
-            Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.repeat) { vm.ratesChanges() }
-                    .show()
-        })
+
+        binding.repeatButton.setOnClickListener {
+            it.isEnabled = false
+            vm.ratesChanges()
+            it.isEnabled = true
+        }
     }
 
 }
