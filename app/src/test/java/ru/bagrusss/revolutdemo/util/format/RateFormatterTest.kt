@@ -116,4 +116,13 @@ class RateFormatterTest {
         assertEquals("1", formatted)
     }
 
+    @Test
+    fun `when zero and zeros after point is empty than digit`() {
+        val number = "0.0000"
+
+        val formatted = formatter.format(number)
+
+        assertEquals("0.00", formatted)
+    }
+
 }

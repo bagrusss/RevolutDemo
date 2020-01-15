@@ -26,6 +26,9 @@ class RateFormatter(
             if (textLen == 1) {
                 text
             } else {
+                if (text[zeros] == '.') {
+                    --zeros
+                }
                 when (digitsAfterSeparator) {
                     0, 1, 2, textLen -> text.substring(zeros, textLen)
                     else -> text.substring(zeros, separatorPosition + 3)
