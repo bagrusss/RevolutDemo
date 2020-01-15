@@ -1,6 +1,6 @@
 package ru.bagrusss.revolutdemo.mappers.rates
 
-import java.math.BigDecimal
+import ru.bagrusss.revolutdemo.screens.rates.models.RateCost
 import javax.inject.Inject
 
 /**
@@ -8,9 +8,9 @@ import javax.inject.Inject
  */
 class RatesMapperImpl @Inject constructor() : RatesMapper {
 
-    override fun map(from: Map<String, Double>): List<Pair<String, BigDecimal>> =
+    override fun map(from: Map<String, Double>): List<RateCost> =
         from.map { (rate, cost) ->
-            rate to cost.toBigDecimal()
+            RateCost(rate, cost.toBigDecimal())
         }
 
 }

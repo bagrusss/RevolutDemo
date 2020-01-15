@@ -7,6 +7,7 @@ import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.screens.rates.models.Rate
+import ru.bagrusss.revolutdemo.screens.rates.models.RateCost
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -25,8 +26,8 @@ class RatesInteractorImpl @Inject constructor(
     override val ratesUpdates: Observable<List<Rate>> by lazy {
         Observable.interval(1, TimeUnit.SECONDS)
             .startWith(0)
-            .switchMap { ratesRepo.actualRates }
-            .mergeWith(ratesRepo.currentCostChanges)
+            .flatMap { ratesRepo.actualRates }
+            .mergeWith(ratesRepo.costChanges)
             .map { ratesCost ->
                 val (baseTitle, baseCost) = ratesRepo.currentBaseRate
                 val (baseDescription, baseImg) = resourcesProvider.rateDescriptionAndImage(baseTitle)
@@ -47,7 +48,7 @@ class RatesInteractorImpl @Inject constructor(
                             title = title,
                             description = description,
                             imgUrl = img,
-                            cost = cost * baseCost
+                            cost = baseCost * cost
                         )
                     )
                 }
@@ -63,11 +64,11 @@ class RatesInteractorImpl @Inject constructor(
             .doOnNext { (rate, cost) ->
                 try {
                     val newCost = cost.toBigDecimal()
-                    if (newCost != ratesRepo.currentBaseRate.second) {
-                        ratesRepo.currentBaseRate = rate to newCost
+                    if (newCost != ratesRepo.currentBaseRate.cost) {
+                        ratesRepo.currentBaseRate = RateCost(rate, newCost)
                     }
                 } catch (e: NumberFormatException) {
-                    ratesRepo.currentBaseRate = rate to BigDecimal.ZERO
+                    ratesRepo.currentBaseRate = RateCost(rate, BigDecimal.ZERO)
                 }
             }
             .ignoreElements()
