@@ -2,9 +2,11 @@ package ru.bagrusss.revolutdemo.screens.rates
 
 import android.content.Context
 import android.widget.EditText
+import ru.bagrusss.revolutdemo.util.android.currentLocale
 import ru.bagrusss.revolutdemo.util.format.RateFormatter
 import ru.bagrusss.revolutdemo.util.text.SimpleTextWatcher
 import java.lang.ref.WeakReference
+import java.text.DecimalFormatSymbols
 import kotlin.math.min
 
 /**
@@ -19,7 +21,11 @@ class RateEditWatcher(
     private val editTextReference = WeakReference(editText)
     private var oldText = ""
 
-    private val formatter = RateFormatter(context)
+    private val formatter = RateFormatter(
+        context.currentLocale
+            .let(DecimalFormatSymbols::getInstance)
+            .decimalSeparator
+    )
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
         oldText = s.toString()

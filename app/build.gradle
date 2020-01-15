@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -14,7 +12,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,10 +22,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    androidExtensions {
+    /*androidExtensions {
         experimental = true
         features = ["parcelize"]
-    }
+    }*/
 
     dataBinding {
         enabled = true
@@ -44,12 +42,15 @@ android {
 
     buildTypes {
         debug {
+            debuggable true
             applicationIdSuffix ".debug"
 
             minifyEnabled false
             shrinkResources false
         }
         release {
+            debuggable false
+
             minifyEnabled true
             shrinkResources true
 
@@ -104,7 +105,7 @@ dependencies {
     ////////////////
     implementation "io.reactivex.rxjava2:rxjava:$rx_java"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rx_kotlin"
+    //implementation "io.reactivex.rxjava2:rxkotlin:$rx_kotlin"
 
 
     ////////////////

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Rates</string>
-    <string name="rates">Rates</string>
 
     <string name="australian">Australian Dollar</string>
     <string name="brazilian">Brazilian Real</string>

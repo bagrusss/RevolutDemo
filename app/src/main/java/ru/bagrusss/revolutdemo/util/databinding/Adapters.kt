@@ -4,6 +4,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import ru.bagrusss.revolutdemo.glide.GlideApp
+import ru.bagrusss.revolutdemo.util.format.preFormattedMoney
+import java.math.BigDecimal
 import kotlin.math.min
 
 /**
@@ -19,16 +21,18 @@ fun ImageView.loadImage(img: String?) {
 }
 
 @BindingAdapter("rate_cost")
-fun EditText.formatCost(cost: Double) {
-    val current = try {
-        text.toString().toDouble()
-    } catch (e: NumberFormatException) {
-        0.0
-    }
-    if (current != cost) {
-        val costString = cost.toString()
-        val selection = min(selectionStart, costString.length)
-        setText(costString)
-        setSelection(selection)
+fun EditText.formatCost(cost: BigDecimal?) {
+    cost?.let {
+        val current = try {
+            text.toString().toBigDecimal()
+        } catch (e: NumberFormatException) {
+            BigDecimal.ZERO
+        }
+        if (current != cost) {
+            val costString = cost.preFormattedMoney
+            val selection = min(selectionStart, costString.length)
+            setText(costString)
+            setSelection(selection)
+        }
     }
 }
