@@ -23,8 +23,9 @@ class RatesVM @Inject constructor(
     private var animationsEnd = true
 
     @JvmField val showLoader = ObservableBoolean(true)
+    @JvmField val isError = ObservableBoolean(false)
+    @JvmField val updateAllowed = ObservableBoolean(false)
     @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
-    @JvmField val errorEvent = MutableLiveData<Unit>()
     @JvmField val ratesChanged = MutableLiveData<Int>()
 
     private val ratesDisposables = CompositeDisposable()
@@ -47,13 +48,20 @@ class RatesVM @Inject constructor(
 
     fun ratesChanges() {
         ratesDisposables += interactor.ratesUpdates
-            .doOnSubscribe { showLoader.set(true) }
+            .doOnSubscribe {
+                showLoader.set(true)
+                updateAllowed.set(false)
+            }
             .filter { animationsEnd }
-            .doOnNext { showLoader.set(false) }
-            .subscribe(ratesChanges::postValue) {
-                errorEvent.postValue(Unit)
-                Timber.e(it)
+            .doOnNext {
                 showLoader.set(false)
+                isError.set(false)
+            }
+            .subscribe(ratesChanges::postValue) {
+                isError.set(true)
+                showLoader.set(false)
+                updateAllowed.set(true)
+                Timber.e(it)
             }
 
     }
