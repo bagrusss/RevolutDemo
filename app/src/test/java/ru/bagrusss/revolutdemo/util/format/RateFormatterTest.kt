@@ -90,12 +90,30 @@ class RateFormatterTest {
     }
 
     @Test
+    fun `when two zero after point only then zero with point`() {
+        val number = ".00"
+
+        val formatted = formatter.format(number)
+
+        assertEquals("0.00", formatted)
+    }
+
+    @Test
     fun `when text is empty than 0`() {
         val number = ""
 
         val formatted = formatter.format(number)
 
         assertEquals("0", formatted)
+    }
+
+    @Test
+    fun `when zero and digit is empty than digit`() {
+        val number = "01"
+
+        val formatted = formatter.format(number)
+
+        assertEquals("1", formatted)
     }
 
 }
