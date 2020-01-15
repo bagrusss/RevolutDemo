@@ -10,5 +10,5 @@ import java.math.BigDecimal
 interface RatesRepository {
     var currentBaseRate: Pair<String, BigDecimal>
     val currentCostChanges: Observable<List<Pair<String, BigDecimal>>>
-    val actualRates: Single<List<Pair<String, BigDecimal>>>
+    val actualRates: Observable<List<Pair<String, BigDecimal>>>
 }

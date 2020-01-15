@@ -25,7 +25,7 @@ class RatesInteractorImpl @Inject constructor(
     override val ratesUpdates: Observable<List<Rate>> by lazy {
         Observable.interval(1, TimeUnit.SECONDS)
             .startWith(0)
-            .switchMapSingle { ratesRepo.actualRates }
+            .switchMap { ratesRepo.actualRates }
             .mergeWith(ratesRepo.currentCostChanges)
             .map { ratesCost ->
                 val (baseTitle, baseCost) = ratesRepo.currentBaseRate

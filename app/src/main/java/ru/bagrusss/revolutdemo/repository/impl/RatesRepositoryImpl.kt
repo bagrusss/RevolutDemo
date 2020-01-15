@@ -7,7 +7,7 @@ import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.util.collections.intersectionFromSecond
-import ru.bagrusss.revolutdemo.util.rx.maybe
+import ru.bagrusss.revolutdemo.util.rx.observable
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -45,12 +45,11 @@ class RatesRepositoryImpl @Inject constructor(
             }
         }
 
-    override val actualRates by lazy {
-        maybe { currentBaseRate }
+    override val actualRates: Observable<List<Pair<String, BigDecimal>>> by lazy {
+        observable { currentBaseRate }
             .filter { (_, cost) -> cost > BigDecimal.ZERO }
             .map { (rate, _) -> rate }
-            .toSingle()
-            .flatMap(service::getRates)
+            .flatMapSingle(service::getRates)
             .map {
                 val mappedRates = ratesMapper.map(it.rates)
                 synchronized(cachedRates) {

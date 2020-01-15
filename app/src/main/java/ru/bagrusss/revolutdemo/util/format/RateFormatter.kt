@@ -26,7 +26,7 @@ class RateFormatter(
             if (textLen == 1) {
                 text
             } else {
-                if (text[zeros] == '.') {
+                if (zeros < textLen && text[zeros] == '.') {
                     --zeros
                 }
                 when (digitsAfterSeparator) {
