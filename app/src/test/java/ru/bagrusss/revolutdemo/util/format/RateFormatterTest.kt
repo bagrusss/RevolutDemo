@@ -125,4 +125,13 @@ class RateFormatterTest {
         assertEquals("0.00", formatted)
     }
 
+    @Test
+    fun `when zeros one zero only`() {
+        val number = "00"
+
+        val formatted = formatter.format(number)
+
+        assertEquals("0", formatted)
+    }
+
 }

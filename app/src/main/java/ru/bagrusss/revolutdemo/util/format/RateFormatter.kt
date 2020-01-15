@@ -30,7 +30,11 @@ class RateFormatter(
                     --zeros
                 }
                 when (digitsAfterSeparator) {
-                    0, 1, 2, textLen -> text.substring(zeros, textLen)
+                    0, 1, 2, textLen -> {
+                        if (zeros == textLen)
+                            "0"
+                        else text.substring(zeros, textLen)
+                    }
                     else -> text.substring(zeros, separatorPosition + 3)
                 }
             }
