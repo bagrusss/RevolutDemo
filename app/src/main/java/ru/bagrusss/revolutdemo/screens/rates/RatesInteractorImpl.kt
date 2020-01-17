@@ -7,7 +7,6 @@ import ru.bagrusss.revolutdemo.providers.ResourcesProvider
 import ru.bagrusss.revolutdemo.providers.SchedulersProvider
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.screens.rates.models.Rate
-import ru.bagrusss.revolutdemo.screens.rates.models.RateCost
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,14 +28,14 @@ class RatesInteractorImpl @Inject constructor(
             .flatMap { ratesRepo.actualRates }
             .mergeWith(ratesRepo.costChanges)
             .map { ratesCost ->
-                val (baseTitle, baseCost) = ratesRepo.currentBaseRate
+                val (baseTitle, currentCost) = ratesRepo.run { currentBaseRate to currentCost }
                 val (baseDescription, baseImg) = resourcesProvider.rateDescriptionAndImage(baseTitle)
                 val rates = mutableListOf(
                     Rate(
                         title = baseTitle,
                         description = baseDescription,
                         imgUrl = baseImg,
-                        cost = baseCost
+                        cost = currentCost
                     )
                 )
 
@@ -48,7 +47,7 @@ class RatesInteractorImpl @Inject constructor(
                             title = title,
                             description = description,
                             imgUrl = img,
-                            cost = baseCost * cost
+                            cost = (cost.toBigDecimal() * currentCost)
                         )
                     )
                 }
@@ -62,20 +61,19 @@ class RatesInteractorImpl @Inject constructor(
             .hide()
             .observeOn(schedulers.computation)
             .doOnNext { (rate, cost) ->
-                try {
-                    val newCost = cost.toBigDecimal()
-                    if (newCost != ratesRepo.currentBaseRate.cost) {
-                        ratesRepo.currentBaseRate = RateCost(rate, newCost)
-                    }
+                val newCost = try {
+                    cost.toBigDecimal()
                 } catch (e: NumberFormatException) {
-                    ratesRepo.currentBaseRate = RateCost(rate, BigDecimal.ZERO)
+                    BigDecimal.ZERO
+                }
+                ratesRepo.run {
+                    currentBaseRate = rate
+                    currentCost = newCost
                 }
             }
             .ignoreElements()
     }
 
-    override fun rateChanged(rate: String, cost: String) {
-        rateChangePublisher.onNext(rate to cost)
-    }
+    override fun rateChanged(rate: String, cost: String) = rateChangePublisher.onNext(rate to cost)
 
 }
