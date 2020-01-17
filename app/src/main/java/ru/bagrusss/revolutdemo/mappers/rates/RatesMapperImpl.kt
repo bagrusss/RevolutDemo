@@ -10,7 +10,7 @@ class RatesMapperImpl @Inject constructor() : RatesMapper {
 
     override fun map(from: Map<String, Double>): List<RateCost> =
         from.map { (rate, cost) ->
-            RateCost(rate, cost.toBigDecimal())
+            RateCost(rate, cost)
         }
 
 }

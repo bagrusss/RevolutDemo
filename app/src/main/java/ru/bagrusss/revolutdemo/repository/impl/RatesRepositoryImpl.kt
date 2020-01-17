@@ -22,34 +22,36 @@ class RatesRepositoryImpl @Inject constructor(
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
     private val cachedRates = mutableListOf(RateCost(DEFAULT_TITLE, DEFAULT_COST))
-    private val costPublisher = PublishSubject.create<List<RateCost>>()
+    private val costPublisher = PublishSubject.create<Unit>()
 
-    override var currentBaseRate: RateCost = cachedRates.first()
+    override var currentBaseRate = DEFAULT_TITLE
         set(value) {
             synchronized(cachedRates) {
-                val (newRate) = value
-                val (oldRate) = field
-                if (oldRate != newRate) {
-                    val newRateIndex = cachedRates.indexOfFirst { it.title == newRate }
+                if (field != value) {
+                    val newRateIndex = cachedRates.indexOfFirst { it.title == value }
                     if (newRateIndex != -1) {
                         val newRateItem = cachedRates.removeAt(newRateIndex)
-                            .apply { cost = BigDecimal.ONE }
-                        cachedRates.add(0, newRateItem)
-                        for (i in 1 until cachedRates.size) {
-                            val rate = cachedRates[i]
-                            cachedRates[i].cost = rate.cost / newRateItem.cost
+                        cachedRates.forEach {
+                            it.cost /= newRateItem.cost
                         }
+                        cachedRates.add(0, newRateItem.apply { cost = 1.0 })
                     }
+                    field = value
+                    costPublisher.onNext(Unit)
                 }
-                field = value
-                costPublisher.onNext(cachedRates)
             }
+        }
+
+    override var currentCost: BigDecimal = BigDecimal.ONE
+        set(value) {
+            field = value
+            costPublisher.onNext(Unit)
         }
 
     override val actualRates: Observable<List<RateCost>> by lazy {
         observable { currentBaseRate }
-            .filter { (_, cost) -> cost > BigDecimal.ZERO }
-            .map { (rate, _) -> rate }
+            .filter { currentCost > BigDecimal.ZERO }
+            .map { currentBaseRate }
             .flatMapSingle(service::getRates)
             .map { response ->
                 val mappedRates = ratesMapper.map(response.rates)
@@ -63,7 +65,8 @@ class RatesRepositoryImpl @Inject constructor(
             }
     }
 
-    override val costChanges: Observable<List<RateCost>> = costPublisher.hide()
+    override val costChanges: Observable<List<RateCost>> =
+        costPublisher.hide().map { cachedRates.toList() }
 
     private fun mergeRates(from: List<RateCost>, to: MutableList<RateCost>) {
         from.forEach { newRate ->
@@ -89,7 +92,7 @@ class RatesRepositoryImpl @Inject constructor(
 
     companion object {
         private const val DEFAULT_TITLE = "EUR"
-        private val DEFAULT_COST = BigDecimal.ONE
+        private const val DEFAULT_COST = 1.0
     }
 
 }
