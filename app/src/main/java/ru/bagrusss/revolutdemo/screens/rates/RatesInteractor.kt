@@ -11,6 +11,7 @@ import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 interface RatesInteractor : Interactor {
 
     val ratesUpdates: Observable<List<Rate>>
+    val ratesErrors: Observable<Boolean>
     val rateChange: Completable
 
     fun rateChanged(rate: String, cost: String)

@@ -7,8 +7,4 @@ import java.math.BigDecimal
  */
 
 val BigDecimal.preFormattedMoney: String
-    get() = if (this.toDouble() == 0.0) {
-        "0"
-    } else {
-        toString()
-    }
+    get() = if (toDouble() == 0.0) "0" else toString()
