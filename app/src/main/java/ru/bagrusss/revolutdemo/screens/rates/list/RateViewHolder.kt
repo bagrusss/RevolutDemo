@@ -1,9 +1,11 @@
 package ru.bagrusss.revolutdemo.screens.rates.list
 
+import android.view.View
 import ru.bagrusss.revolutdemo.databinding.ItemRateBinding
 import ru.bagrusss.revolutdemo.screens.rates.RateEditWatcher
 import ru.bagrusss.revolutdemo.screens.rates.RatesVM
 import ru.bagrusss.revolutdemo.screens.rates.models.Rate
+import ru.bagrusss.revolutdemo.util.keyboard.showKeyboard
 import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
 
 /**
@@ -12,7 +14,7 @@ import ru.bagrusss.revolutdemo.util.recycler.MvvmViewHolder
 class RateViewHolder(
     binding: ItemRateBinding,
     vm: RatesVM
-) : MvvmViewHolder<ItemRateBinding, RatesVM, Rate>(binding, vm) {
+) : MvvmViewHolder<ItemRateBinding, RatesVM, Rate>(binding, vm), View.OnClickListener {
 
     private val itemData = RateItemData()
 
@@ -27,11 +29,8 @@ class RateViewHolder(
     }
 
     init {
-        itemView.setOnClickListener { rateChanged() }
-        binding.rateValue.setOnFocusChangeListener { _, active ->
-            if (active)
-                rateChanged()
-        }
+        itemView.setOnClickListener(this)
+        binding.preventEdit.setOnClickListener(this)
         binding.data = itemData
         binding.rateValue.addTextChangedListener(currentRateWatcher)
     }
@@ -41,15 +40,20 @@ class RateViewHolder(
         description.set(data.description)
         imgSrc.set(data.imgUrl)
         cost.set(data.cost)
+        costActive.set(adapterPosition == 0)
     }
+
+    override fun onClick(v: View?) = rateChanged()
 
     private fun rateChanged() {
         val costText = binding.rateValue.text.toString()
         val title = itemData.title.get()
         if (adapterPosition > 0 && title != null && costText.isNotEmpty()) {
-            vm.ratesClicked(adapterPosition, title, costText)
-            binding.rateValue.post {
-                binding.rateValue.requestFocus()
+            vm.currentRateCostChanged(title, costText)
+            binding.rateValue.run {
+                requestFocus()
+                setSelection(text.length)
+                showKeyboard()
             }
         }
     }

@@ -4,9 +4,9 @@
     package="ru.bagrusss.revolutdemo">
 
     <application
-        android:label="@string/app_name"
-        tools:replace="android:name"
         android:name=".app.RatesAppDebug"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning" />
+        android:label="@string/app_name"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        tools:replace="android:name" />
 
 </manifest>

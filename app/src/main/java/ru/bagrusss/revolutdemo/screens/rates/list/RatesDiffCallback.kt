@@ -6,23 +6,18 @@ import ru.bagrusss.revolutdemo.screens.rates.models.Rate
 /**
  * Created by bagrusss on 23.08.2019
  */
-class RatesDiffCallback(
-    private val oldCollection: List<Rate>,
-    private val newCollection: List<Rate>
-) : DiffUtil.Callback() {
+class RatesDiffCallback : DiffUtil.ItemCallback<Rate>() {
 
-    override fun getOldListSize() = oldCollection.size
-    override fun getNewListSize() = newCollection.size
+    override fun areItemsTheSame(oldItem: Rate, newItem: Rate) = oldItem.title == newItem.title
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldCollection[oldItemPosition].title == newCollection[newItemPosition].title
+    override fun areContentsTheSame(oldItem: Rate, newItem: Rate): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldContent = oldCollection[oldItemPosition]
-        val newContent = newCollection[newItemPosition]
-        return oldContent.title == newContent.title
-                && oldContent.cost == newContent.cost
+    override fun getChangePayload(oldItem: Rate, newItem: Rate): Any? {
+        return if (oldItem != newItem)
+            newItem
+        else null
     }
 
 }
