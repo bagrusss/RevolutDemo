@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -44,38 +43,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/loader" />
-
-        <View
-            android:id="@+id/error_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/loader"
-            android:background="@color/colorPrimary"
-            android:visibility="@{data.isError ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone" />
-
-        <TextView
-            android:id="@+id/error_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/error_text"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:visibility="@{data.isError ? View.VISIBLE : View.GONE}" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/repeat_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:enabled="@{data.updateAllowed}"
-            android:text="@string/repeat"
-            android:textColor="@color/colorPrimary"
-            android:visibility="@{data.isError ? View.VISIBLE : View.GONE}" />
 
     </RelativeLayout>
 </layout>

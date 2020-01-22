@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="data"
             type="ru.bagrusss.revolutdemo.screens.rates.list.RateItemData" />
@@ -85,6 +87,14 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 bind:rate_cost="@{data.cost}" />
+
+            <View
+                android:id="@+id/prevent_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:visibility="@{!data.costActive ? View.VISIBLE : View.GONE}" />
 
         </RelativeLayout>
 

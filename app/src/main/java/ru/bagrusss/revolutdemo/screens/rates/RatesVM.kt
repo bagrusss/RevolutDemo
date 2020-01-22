@@ -20,21 +20,19 @@ class RatesVM @Inject constructor(
     interactor: RatesInteractor
 ) : BaseViewModel<RatesInteractor>(interactor) {
 
-    private var animationsEnd = true
-
     @JvmField val showLoader = ObservableBoolean(true)
-    @JvmField val isError = ObservableBoolean(false)
-    @JvmField val updateAllowed = ObservableBoolean(false)
     @JvmField val ratesChanges = MutableLiveData<List<Rate>>()
-    @JvmField val ratesChanged = MutableLiveData<Int>()
+    @JvmField val mainRateChanged = MutableLiveData<Unit>()
+    @JvmField val errors = MutableLiveData<Boolean>()
 
     private val ratesDisposables = CompositeDisposable()
+    private var mainRateUpdated = false
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun started() {
         ratesChanges()
-        ratesDisposables += interactor.rateChange
-            .subscribe()
+        ratesDisposables += interactor.rateChange.subscribe()
+        ratesDisposables += interactor.ratesErrors.subscribe(errors::postValue)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -42,40 +40,26 @@ class RatesVM @Inject constructor(
         ratesDisposables.clear()
     }
 
-    fun ratesAnimationsEnded() {
-        animationsEnd = true
+    fun currentRateCostChanged(rate: String, costText: String) {
+        mainRateUpdated = true
+        interactor.rateChanged(rate, costText)
     }
 
-    fun ratesChanges() {
-        ratesDisposables += interactor.ratesUpdates
-            .doOnSubscribe {
-                showLoader.set(true)
-                updateAllowed.set(false)
-            }
-            .filter { animationsEnd }
-            .doOnNext {
-                showLoader.set(false)
-                isError.set(false)
-            }
-            .subscribe(ratesChanges::postValue) {
-                isError.set(true)
-                showLoader.set(false)
-                updateAllowed.set(true)
-                Timber.e(it)
-            }
-
-    }
-
-    fun ratesClicked(position: Int, rate: String, costText: String) {
-        if (animationsEnd) {
-            animationsEnd = false
-            currentRateCostChanged(rate, costText)
-            ratesChanged.postValue(position)
+    fun listUpdated() {
+        if (mainRateUpdated) {
+            mainRateChanged.postValue(Unit)
+            mainRateUpdated = false
         }
     }
 
-    fun currentRateCostChanged(rate: String, costText: String) {
-        interactor.rateChanged(rate, costText)
+    private fun ratesChanges() {
+        ratesDisposables += interactor.ratesUpdates
+            .doOnSubscribe {
+                if (ratesChanges.value == null)
+                    showLoader.set(true)
+            }
+            .doOnNext { showLoader.set(false) }
+            .subscribe(ratesChanges::postValue, Timber::e)
     }
 
 }

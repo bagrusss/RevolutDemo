@@ -21,11 +21,14 @@ class RatesInteractorImpl @Inject constructor(
 ) : RatesInteractor {
 
     private val rateChangePublisher = PublishSubject.create<Pair<String, String>>()
+    private val errorPublisher = PublishSubject.create<Boolean>()
 
     override val ratesUpdates: Observable<List<Rate>> by lazy {
-        Observable.interval(1, TimeUnit.SECONDS)
-            .startWith(0)
-            .flatMap { ratesRepo.actualRates }
+        ratesRepo.actualRates
+            .doOnError { errorPublisher.onNext(true) }
+            .doOnNext { errorPublisher.onNext(false) }
+            .retryWhen { it.delay(1, TimeUnit.SECONDS) }
+            .repeatWhen { it.delay(1, TimeUnit.SECONDS) }
             .mergeWith(ratesRepo.costChanges)
             .map { ratesCost ->
                 val (baseTitle, currentCost) = ratesRepo.run { currentBaseRate to currentCost }
@@ -47,13 +50,18 @@ class RatesInteractorImpl @Inject constructor(
                             title = title,
                             description = description,
                             imgUrl = img,
-                            cost = (cost.toBigDecimal() * currentCost)
+                            cost = cost.toBigDecimal() * currentCost
                         )
                     )
                 }
                 rates as List<Rate>
             }
             .observeOn(schedulers.ui)
+    }
+
+    override val ratesErrors: Observable<Boolean> by lazy {
+        errorPublisher.hide()
+            .distinctUntilChanged()
     }
 
     override val rateChange: Completable by lazy {

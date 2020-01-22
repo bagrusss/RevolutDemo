@@ -40,5 +40,7 @@
     <string name="error_text">Something went wrong ¯\\_(ツ)_/¯</string>
     <string name="repeat">Repeat</string>
     <string name="rate_icon">Rate\'s icon</string>
+    <string name="update_error">An error occurred. Rates may be not actual</string>
+    <string name="ok">OK</string>
 
 </resources>
