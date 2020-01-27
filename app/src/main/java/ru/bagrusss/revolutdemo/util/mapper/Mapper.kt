@@ -1,4 +1,4 @@
-package ru.bagrusss.revolutdemo.mappers
+package ru.bagrusss.revolutdemo.util.mapper
 
 /**
  * Created by bagrusss on 23.09.2019

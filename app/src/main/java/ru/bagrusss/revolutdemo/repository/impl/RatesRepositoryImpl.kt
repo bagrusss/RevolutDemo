@@ -7,10 +7,9 @@ import ru.bagrusss.revolutdemo.net.api.RatesService
 import ru.bagrusss.revolutdemo.net.gateways.Gateway
 import ru.bagrusss.revolutdemo.repository.RatesRepository
 import ru.bagrusss.revolutdemo.screens.rates.models.RateCost
+import ru.bagrusss.revolutdemo.storage.RatesCostStorage
 import ru.bagrusss.revolutdemo.util.rx.observable
-import timber.log.Timber
 import java.math.BigDecimal
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -18,27 +17,22 @@ import javax.inject.Inject
  */
 class RatesRepositoryImpl @Inject constructor(
     ratesService: RatesService,
+    private val cachedRatesStorage: RatesCostStorage,
     private val ratesMapper: RatesMapper
 ) : Gateway<RatesService>(ratesService), RatesRepository {
 
-    private val cachedRates = mutableListOf(RateCost(DEFAULT_TITLE, DEFAULT_COST))
     private val costPublisher = PublishSubject.create<Unit>()
+
+    init {
+        cachedRatesStorage.currentRates = mutableListOf(RateCost(DEFAULT_TITLE, DEFAULT_COST))
+    }
 
     override var currentBaseRate = DEFAULT_TITLE
         set(value) {
-            synchronized(cachedRates) {
-                if (field != value) {
-                    val newRateIndex = cachedRates.indexOfFirst { it.title == value }
-                    if (newRateIndex != -1) {
-                        val newRateItem = cachedRates.removeAt(newRateIndex)
-                        cachedRates.forEach {
-                            it.cost /= newRateItem.cost
-                        }
-                        cachedRates.add(0, newRateItem.apply { cost = 1.0 })
-                    }
-                    field = value
-                    costPublisher.onNext(Unit)
-                }
+            if (field != value) {
+                cachedRatesStorage.selectPrimaryRate(value)
+                field = value
+                costPublisher.onNext(Unit)
             }
         }
 
@@ -55,40 +49,15 @@ class RatesRepositoryImpl @Inject constructor(
             .flatMapSingle(service::getRates)
             .map { response ->
                 val mappedRates = ratesMapper.map(response.rates)
-                synchronized(cachedRates) {
-                    val base = RateCost(response.base, DEFAULT_COST)
-                    val actualRates = mutableListOf(base).apply { addAll(mappedRates) }
-                    mergeRates(actualRates, cachedRates)
-                    Timber.d("Rates size ${cachedRates.size} | first ${cachedRates.first()}")
-                    cachedRates.toList()
-                }
+                val base = RateCost(response.base, DEFAULT_COST)
+                val actualRates = mutableListOf(base).apply { addAll(mappedRates) }
+                cachedRatesStorage.currentRates = actualRates
+                cachedRatesStorage.currentRates
             }
     }
 
-    override val costChanges: Observable<List<RateCost>> =
-        costPublisher.hide().map { cachedRates.toList() }
-
-    private fun mergeRates(from: List<RateCost>, to: MutableList<RateCost>) {
-        from.forEach { newRate ->
-            val oldRate = to.firstOrNull { it.title == newRate.title }
-            if (oldRate == null) {
-                to.add(newRate)
-            } else {
-                oldRate.cost = newRate.cost
-            }
-        }
-        val indexesToRemove = LinkedList<Int>()
-        for (i in 1 until to.size) {
-            val oldRate = to[i]
-            val newRateIndex = from.indexOfFirst { it.title == oldRate.title }
-            if (newRateIndex == -1) {
-                indexesToRemove.add(i)
-            }
-        }
-        indexesToRemove.forEach {
-            to.removeAt(it)
-        }
-    }
+    override val costChanges: Observable<List<RateCost>> = costPublisher.hide()
+        .map { cachedRatesStorage.currentRates }
 
     companion object {
         private const val DEFAULT_TITLE = "EUR"
