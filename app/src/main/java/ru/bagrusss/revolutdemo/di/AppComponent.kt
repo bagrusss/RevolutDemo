@@ -22,6 +22,7 @@ import javax.inject.Singleton
 
         ProvidersModule::class,
         ReposModule::class,
+        StorageModule::class,
         MappersModule::class,
 
         AndroidInjectionModule::class,
