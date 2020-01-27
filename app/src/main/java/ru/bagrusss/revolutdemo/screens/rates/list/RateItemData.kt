@@ -1,5 +1,6 @@
 package ru.bagrusss.revolutdemo.screens.rates.list
 
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import java.math.BigDecimal
 
@@ -12,4 +13,5 @@ class RateItemData {
     @JvmField val description = ObservableField("")
     @JvmField val imgSrc = ObservableField("")
     @JvmField val cost = ObservableField(BigDecimal.ZERO)
+    @JvmField val costActive = ObservableBoolean(false)
 }

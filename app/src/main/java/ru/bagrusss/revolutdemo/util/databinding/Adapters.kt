@@ -6,7 +6,6 @@ import androidx.databinding.BindingAdapter
 import ru.bagrusss.revolutdemo.glide.GlideApp
 import ru.bagrusss.revolutdemo.util.format.preFormattedMoney
 import java.math.BigDecimal
-import kotlin.math.min
 
 /**
  * Created by bagrusss on 23.08.2019
@@ -28,11 +27,7 @@ fun EditText.formatCost(cost: BigDecimal?) {
         } catch (e: NumberFormatException) {
             BigDecimal.ZERO
         }
-        if (current != cost) {
-            val costString = cost.preFormattedMoney
-            val selection = min(selectionStart, costString.length)
-            setText(costString)
-            setSelection(selection)
-        }
+        if (current != cost)
+            setText(cost.preFormattedMoney)
     }
 }
